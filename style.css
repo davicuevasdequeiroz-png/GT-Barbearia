@@ -25,7 +25,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   overflow-x: hidden;
 }
 
@@ -538,18 +538,6 @@ body {
   }
 }
 
-/* Foreground mist is bounded to the foot of the photographs. */
-#hero-fog {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 110px;
-  width: 100%;
-  height: 140px;
-  z-index: 8;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, #000, rgba(0,0,0,0.45) 18%, transparent 38%, transparent 62%, rgba(0,0,0,0.45) 82%, #000);
-  mask-image: linear-gradient(to right, #000, rgba(0,0,0,0.45) 18%, transparent 38%, transparent 62%, rgba(0,0,0,0.45) 82%, #000);
-}
 
 /* Useful entry points frame the team without competing with the title. */
 .hero-actions {
@@ -824,3 +812,27 @@ a:focus-visible { outline: 2px solid var(--orange-light); outline-offset: 5px; }
 @media (prefers-reduced-motion: reduce) { .footer-contact-links a, .footer-contact-links svg { transition: none; } }
 
 .site-footer .footer-eyebrow, .site-footer .location-route svg, .site-footer .footer-brand { color: var(--orange-light); }
+
+/* Stable touch layout with native scrolling and no continuously rendered effects. */
+@media (max-width: 900px), (hover: none), (pointer: coarse) {
+  #hero { height: 100svh; background: radial-gradient(ellipse at 50% 42%, #38200f 0%, #1c1009 42%, #0a0a0a 80%); }
+  #hero-canvas, #preloader-canvas { display: none; }
+  #planos { min-height: 100svh; }
+  .barber-img, .barber-card:not(.center) .barber-img, .barber-card:hover .barber-img, .barber-card:not(.center):hover .barber-img {
+    filter: none; transition: none; will-change: auto; perspective: none;
+  }
+  .barber-card:hover .barber-img { transform: none; }
+  .barber-img-wrap, .barber-outline { will-change: auto; }
+  .barber-outline { display: none; }
+  .hero-lettering { filter: none; }
+  .barber-img { max-height: 82svh; }
+  .barber-card:not(.center) .barber-img { max-height: 72svh; }
+}
+@media (max-width: 600px) {
+  .barber-img { max-height: 55svh; }
+  .barber-card:not(.center) .barber-img { max-height: 45svh; }
+}
+@media (min-width: 901px) and (pointer: coarse) {
+  #sobre-nos { min-height: max(700px, 100svh); }
+  .sobre-photo { max-width: clamp(300px, calc((100svh - 300px) * 0.8), 480px); }
+}

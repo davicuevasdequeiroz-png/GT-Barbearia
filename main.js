@@ -7,11 +7,13 @@
    1. GSAP Plugin Registration (free only)
 ───────────────────────────────────────── */
 gsap.registerPlugin(ScrollTrigger);
+const DESKTOP_MOTION_QUERY = '(min-width: 901px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
 
 /* ─────────────────────────────────────────
    2. PRELOADER — WebGL fire shader
 ───────────────────────────────────────── */
 (function initPreloaderCanvas() {
+  if (!window.matchMedia(DESKTOP_MOTION_QUERY).matches) return;
   const canvas = document.getElementById('preloader-canvas');
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
   if (!gl) return;
@@ -137,13 +139,6 @@ gsap.registerPlugin(ScrollTrigger);
     }))
   );
   // ── 3. Inicializa o hero (shader + Lenis + ScrollTrigger)
-  function prepareHeroSilently(onReady) {
-    initHeroShader();
-    initLenis();
-    initBarberScrollEffects();
-    initBarberHover();
-    requestAnimationFrame(() => requestAnimationFrame(onReady));
-  }
   // ── 2. Barra de progresso simulada — trava em 88% até imagens prontas ──
   const LOCK_AT = 88;
   let fakeProgress = 0;
@@ -258,8 +253,9 @@ gsap.registerPlugin(ScrollTrigger);
    4. HERO WEBGL BACKGROUND — mouse-reactive
 ───────────────────────────────────────── */
 function initHeroShader() {
+  const desktopMotion = window.matchMedia(DESKTOP_MOTION_QUERY);
+  if (!desktopMotion.matches) return;
   const hero = document.getElementById('hero');
-  const fog = document.getElementById('hero-fog');
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pointer = { x: 0.5, y: 0.4 };
   const smooth = { ...pointer };
@@ -301,24 +297,6 @@ function initHeroShader() {
       gl_FragColor=vec4(col,1.0);
     }
   `;
-  const mist = noiseSource + `
-    void main(){
-      vec2 uv=gl_FragCoord.xy/u_resolution;
-      float t=u_time*0.045;
-      vec2 p=vec2(uv.x*8.0,uv.y*2.4);
-      p.x+=(u_mouse.x-0.5)*0.15;
-      vec2 curl=vec2(fbm(p+vec2(-t,0.0)),fbm(p+vec2(t*0.6,4.0)));
-      float n=fbm(p+curl*2.8+vec2(-t,0.0));
-      float detail=fbm(p*1.8+vec2(t*0.35,-t*0.2));
-      float banks=0.10+0.90*smoothstep(0.15,0.85,abs(uv.x-0.5)*2.0);
-      float ceiling=0.52+0.34*fbm(vec2(uv.x*5.0-t,2.0));
-      float mask=smoothstep(0.0,0.16,uv.y)*(1.0-smoothstep(ceiling-0.25,ceiling+0.15,uv.y));
-      float density=smoothstep(0.23,0.66,n)*mask*banks;
-      vec3 smoke=mix(vec3(0.12,0.13,0.14),vec3(0.30,0.28,0.25),detail);
-      smoke+=vec3(0.06,0.02,0.004)*pow(n,2.0);
-      gl_FragColor=vec4(smoke,density*0.38);
-    }
-  `;
   function createLayer(canvas, fragment, alpha) {
     const gl=canvas.getContext('webgl', { alpha, premultipliedAlpha: false, antialias: false });
     if (!gl) return null;
@@ -344,11 +322,11 @@ function initHeroShader() {
     return { canvas, gl, time:gl.getUniformLocation(program,'u_time'),
       resolution:gl.getUniformLocation(program,'u_resolution'),mouse:gl.getUniformLocation(program,'u_mouse') };
   }
-  const layers=[createLayer(document.getElementById('hero-canvas'),background,false),createLayer(fog,mist,true)].filter(Boolean);
+  const layers=[createLayer(document.getElementById('hero-canvas'),background,false)].filter(Boolean);
   let frame=0, previous=0, elapsed=0, visible=true;
   function render(now) {
     frame=0;
-    if (!visible || document.hidden) { previous=0; return; }
+    if (!visible || document.hidden || !desktopMotion.matches) { previous=0; return; }
     if (previous && now-previous<32) { frame=requestAnimationFrame(render); return; }
     if (previous && !motion.matches) elapsed+=Math.min(now-previous,100)/1000;
     previous=now;
@@ -362,17 +340,8 @@ function initHeroShader() {
     }
     if (!motion.matches) frame=requestAnimationFrame(render);
   }
-  function wake() { if (!frame && visible && !document.hidden) frame=requestAnimationFrame(render); }
+  function wake() { if (!frame && visible && !document.hidden && desktopMotion.matches) frame=requestAnimationFrame(render); }
   function resize() {
-    const heroRect=hero.getBoundingClientRect();
-    const photos=[...hero.querySelectorAll('.barber-img')];
-    // A thin edge haze stays in the bottom fifth of the photos, clear of the labels.
-    const photoHeight=Math.min(...photos.map(img=>img.offsetHeight));
-    const labelHeight=Math.max(...[...hero.querySelectorAll('.barber-info')].map(el=>el.offsetHeight));
-    const team=hero.querySelector('#barbers-container');
-    const teamBottom=hero.clientHeight-team.offsetTop-team.offsetHeight;
-    fog.style.bottom=(labelHeight+teamBottom)+'px';
-    fog.style.height=Math.max(1,Math.min(120,heroRect.height*0.14,photoHeight*0.20))+'px';
     for (const {canvas,gl} of layers) {
       const rect=canvas.getBoundingClientRect();
       const scale=Math.min(window.devicePixelRatio || 1,1.25,1440/Math.max(rect.width,1));
@@ -400,103 +369,79 @@ function initHeroShader() {
     if (document.hidden) { cancelAnimationFrame(frame); frame=0; previous=0; } else wake();
   });
   motion.addEventListener('change',()=>{previous=0;wake();});
+  desktopMotion.addEventListener('change', () => {
+    cancelAnimationFrame(frame); frame=0; previous=0; wake();
+  });
   resize();
 }
 
 function initLenis() {
-  const lenis = new Lenis({
-    duration: 0.2,
-    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    syncTouch: true,
+  // Touch scrolling stays entirely native; desktop smoothing has a clean teardown.
+  gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
+    const lenis = new Lenis({
+      duration: 0.6,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      syncTouch: false,
+    });
+    const tick = time => lenis.raf(time * 1000);
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    return () => {
+      gsap.ticker.remove(tick);
+      lenis.destroy();
+    };
   });
-
-  // Connect Lenis to GSAP ScrollTrigger
-  lenis.on('scroll', ScrollTrigger.update);
-
-  gsap.ticker.add(time => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-
-  return lenis;
 }
 
-/* ─────────────────────────────────────────
-   6. BARBER SCROLL PARALLAX + OUTLINE DELAY
-───────────────────────────────────────── */
 function initBarberScrollEffects() {
-  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+  gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
     gsap.to('.hero-brand', {
-      y: -70,
-      opacity: 0.25,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.8,
-      },
+      y: -70, opacity: 0.25, ease: 'none',
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.8 }
     });
-  });
-
-  const cards = document.querySelectorAll('.barber-card');
-
-  cards.forEach(card => {
-    const imgWrap = card.querySelector('.barber-img-wrap');
-    const outline = card.querySelector('.barber-outline');
-    const isCenter = card.classList.contains('center');
-    const speed = isCenter ? -130 : -85;
-
-    // Image rises on scroll — otimizado com scrub reduzido
-    gsap.to(imgWrap, {
-      y: speed,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.5,  // Reduzido para melhor performance
-        fastScrollEnd: true,
-      }
-    });
-
-    // Outline follows with delay — otimizado
-    gsap.to(outline, {
-      y: speed * 0.82,
-      opacity: 1,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top+=80 top',
-        end: 'bottom top',
-        scrub: 2,  // Reduzido de 4 para melhor performance
-        fastScrollEnd: true,
-      }
+    document.querySelectorAll('.barber-card').forEach(card => {
+      const speed = card.classList.contains('center') ? -130 : -85;
+      gsap.to(card.querySelector('.barber-img-wrap'), {
+        y: speed, ease: 'none',
+        scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5 }
+      });
+      gsap.to(card.querySelector('.barber-outline'), {
+        y: speed * 0.82, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#hero', start: 'top+=80 top', end: 'bottom top', scrub: 2 }
+      });
     });
   });
 }
 
-/* ─────────────────────────────────────────
-   7. BARBER HOVER — pure GSAP
-───────────────────────────────────────── */
 function initBarberHover() {
-  document.querySelectorAll('.barber-card').forEach(card => {
-    const img = card.querySelector('.barber-img');
-
-    card.addEventListener('mouseenter', () => {
-      gsap.to(img, { scale: 1.08, y: -12, duration: 0.55, ease: 'power3.out' });
+  gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
+    const cleanups = [];
+    document.querySelectorAll('.barber-card').forEach(card => {
+      const img = card.querySelector('.barber-img');
+      const enter = () => gsap.to(img, { scale: 1.08, y: -12, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
+      const leave = () => gsap.to(img, { scale: 1, y: 0, duration: 0.75, ease: 'power3.inOut', overwrite: 'auto' });
+      card.addEventListener('mouseenter', enter);
+      card.addEventListener('mouseleave', leave);
+      cleanups.push(() => {
+        card.removeEventListener('mouseenter', enter);
+        card.removeEventListener('mouseleave', leave);
+        gsap.killTweensOf(img);
+        gsap.set(img, { clearProps: 'transform' });
+      });
     });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(img, { scale: 1, y: 0, duration: 0.75, ease: 'power3.inOut' });
-    });
+    return () => cleanups.forEach(cleanup => cleanup());
   });
 }
 
-/* ─────────────────────────────────────────
-   8. HERO ENTRY ANIMATIONS
-   — Chamada APÓS o preloader sair completamente
-   — Hero já está renderizado e sem jank
-───────────────────────────────────────── */
 function initHeroAnimations() {
+  if (!window.matchMedia(DESKTOP_MOTION_QUERY).matches) {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.from('.hero-brand, .barber-card, .hero-actions', { opacity: 0, duration: 0.45, stagger: 0.05, clearProps: 'opacity' });
+    }
+    return;
+  }
   // immediateRender:false garante que o GSAP seta os estados iniciais
   // APENAS quando a animação começa, não antes
   const tl = gsap.timeline({ delay: 0.05 });
@@ -540,6 +485,12 @@ function initHeroAnimations() {
    9. SOBRE NÓS SCROLL ANIMATIONS
 ───────────────────────────────────────── */
 function initSobreNosAnimations() {
+  gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
+    gsap.fromTo('.sobre-img', { scale: 1.07, yPercent: -2 }, {
+      scale: 1.07, yPercent: 2, ease: 'none',
+      scrollTrigger: { trigger: '.sobre-photo', start: 'top bottom', end: 'bottom top', scrub: 0.8 }
+    });
+  });
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
     gsap.from('.sobre-section-label', {
       opacity: 0, y: 16, duration: 0.65, ease: 'power2.out',
@@ -557,10 +508,7 @@ function initSobreNosAnimations() {
       y: 18, opacity: 0, duration: 1.1, ease: 'power3.out',
       scrollTrigger: { trigger: '.sobre-photo', start: 'top 85%', once: true }
     });
-    gsap.fromTo('.sobre-img', { scale: 1.07, yPercent: -2 }, {
-      scale: 1.07, yPercent: 2, ease: 'none',
-      scrollTrigger: { trigger: '.sobre-photo', start: 'top bottom', end: 'bottom top', scrub: 0.8 }
-    });
+
     gsap.from('.valor-item', {
       opacity: 0, y: 20, duration: 0.6, stagger: 0.12, ease: 'power2.out',
       scrollTrigger: { trigger: '.sobre-valores', start: 'top 92%', once: true }
