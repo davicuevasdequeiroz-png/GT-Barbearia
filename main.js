@@ -49,7 +49,7 @@ gsap.registerPlugin(ScrollTrigger);
     }
     float fbm(vec2 p) {
       float v = 0.0; float a = 0.5;
-      for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
+      for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
       return v;
     }
     void main() {
@@ -267,7 +267,14 @@ function initHeroShader() {
     gl.viewport(0, 0, canvas.width, canvas.height);
   }
   resize();
-  window.addEventListener('resize', resize);
+  
+  // Debounce resize para melhor performance
+  let resizeTimeout;
+  const debouncedResize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resize, 150);
+  };
+  window.addEventListener('resize', debouncedResize, { passive: true });
 
   let mouse = { x: 0.5, y: 0.5 };
   let smooth = { x: 0.5, y: 0.5 };
@@ -275,7 +282,7 @@ function initHeroShader() {
   window.addEventListener('mousemove', e => {
     mouse.x = e.clientX / window.innerWidth;
     mouse.y = 1.0 - e.clientY / window.innerHeight;
-  });
+  }, { passive: true });
 
   const vsSource = `attribute vec4 a_position; void main(){gl_Position=a_position;}`;
 
@@ -293,25 +300,25 @@ function initHeroShader() {
     }
     float fbm(vec2 p){
       float v=0.0,a=0.5;
-      for(int i=0;i<6;i++){v+=a*noise(p);p*=2.1;a*=0.45;}
+      for(int i=0;i<4;i++){v+=a*noise(p);p*=2.1;a*=0.45;}
       return v;
     }
     void main(){
       vec2 uv=gl_FragCoord.xy/u_resolution;
       vec2 m=u_mouse-0.5;
-      vec2 wuv=uv+m*0.07;
-      float t=u_time*0.14;
-      vec2 q=vec2(fbm(wuv*1.9+t),fbm(wuv*1.9+vec2(1.7,9.2)+t));
-      float f=fbm(wuv*1.5+1.7*q);
+      vec2 wuv=uv+m*0.05;
+      float t=u_time*0.12;
+      vec2 q=vec2(fbm(wuv*1.8+t),fbm(wuv*1.8+vec2(1.7,9.2)+t));
+      float f=fbm(wuv*1.5+1.5*q);
       float vign=1.0-smoothstep(0.25,0.95,length(uv-0.5)*1.7);
       float md=length(uv-u_mouse);
-      float mg=exp(-md*7.0)*0.3;
+      float mg=exp(-md*6.0)*0.25;
       vec3 dark=vec3(0.04,0.02,0.01);
       vec3 orng=vec3(1.0,0.42,0.0);
-      vec3 col=mix(dark,orng,f*vign*0.5);
+      vec3 col=mix(dark,orng,f*vign*0.48);
       col+=orng*mg;
-      col+=orng*0.03*vign;
-      col=mix(dark,col,0.72+vign*0.28);
+      col+=orng*0.02*vign;
+      col=mix(dark,col,0.7+vign*0.3);
       gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
     }
   `;
@@ -356,9 +363,10 @@ function initHeroShader() {
 ───────────────────────────────────────── */
 function initLenis() {
   const lenis = new Lenis({
-    duration: 1.4,
+    duration: 0.2,
     easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
+    syncTouch: true,
   });
 
   // Connect Lenis to GSAP ScrollTrigger
@@ -382,7 +390,7 @@ function initBarberScrollEffects() {
     const isCenter = card.classList.contains('center');
     const speed = isCenter ? -130 : -85;
 
-    // Image rises on scroll
+    // Image rises on scroll — otimizado com scrub reduzido
     gsap.to(imgWrap, {
       y: speed,
       ease: 'none',
@@ -390,20 +398,22 @@ function initBarberScrollEffects() {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom top',
-        scrub: 1,
+        scrub: 0.5,  // Reduzido para melhor performance
+        fastScrollEnd: true,
       }
     });
 
-    // Outline follows with delay (slower scrub)
+    // Outline follows with delay — otimizado
     gsap.to(outline, {
       y: speed * 0.82,
       opacity: 1,
       ease: 'none',
       scrollTrigger: {
         trigger: '#hero',
-        start: 'top+=80 top',  // starts slightly later
+        start: 'top+=80 top',
         end: 'bottom top',
-        scrub: 4,              // heavy scrub = visible delay
+        scrub: 2,  // Reduzido de 4 para melhor performance
+        fastScrollEnd: true,
       }
     });
   });
@@ -457,3 +467,52 @@ function initHeroAnimations() {
       immediateRender: false,
     }, '-=0.35');
 }
+
+/* ─────────────────────────────────────────
+   9. SOBRE NÓS SCROLL ANIMATIONS
+───────────────────────────────────────── */
+function initSobreNosAnimations() {
+  // Image parallax + fade — otimizado
+  gsap.from('.sobre-nos-image', {
+    opacity: 0, x: -60, duration: 0.9,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '#sobre-nos',
+      start: 'top 70%',
+      end: 'top 30%',
+      toggleActions: 'play none none none',
+      fastScrollEnd: true,
+    }
+  });
+
+  // Content fade and slide — otimizado
+  gsap.from('.sobre-nos-content', {
+    opacity: 0, x: 60, duration: 0.9,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '#sobre-nos',
+      start: 'top 70%',
+      end: 'top 30%',
+      toggleActions: 'play none none none',
+      fastScrollEnd: true,
+    }
+  });
+
+  // Staggered values animation — otimizado
+  gsap.from('.valor-item', {
+    opacity: 0, y: 30,
+    duration: 0.6, ease: 'power3.out',
+    stagger: 0.12,
+    scrollTrigger: {
+      trigger: '.sobre-valores',
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+      fastScrollEnd: true,
+    }
+  });
+}
+
+// Chama as animações do sobre nós quando a página carrega
+document.addEventListener('DOMContentLoaded', () => {
+  initSobreNosAnimations();
+});

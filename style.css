@@ -122,6 +122,7 @@ body {
   background: var(--black);
   display: flex;
   flex-direction: column;
+  contain: layout style paint;
 }
 
 #hero-canvas {
@@ -248,6 +249,7 @@ body {
   z-index: 5;
   gap: 0;
   padding: 0 40px;
+  contain: layout style paint;
 }
 
 /* Individual card */
@@ -283,6 +285,8 @@ body {
   filter: drop-shadow(0 0 10px var(--orange)) drop-shadow(0 0 25px rgba(255, 106, 0, 0.4));
   transform-origin: bottom center;
   will-change: transform;
+  backface-visibility: hidden;
+  contain: layout style paint;
 }
 
 /* Image wrapper — handles hover scale + scroll parallax */
@@ -293,6 +297,8 @@ body {
   justify-content: center;
   overflow: visible;
   will-change: transform;
+  backface-visibility: hidden;
+  contain: layout style;
 }
 
 .barber-img {
@@ -307,6 +313,9 @@ body {
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
   will-change: transform;
   max-height: 82vh;
+  contain: layout style paint;
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Side cards slightly smaller */
@@ -386,6 +395,127 @@ body {
 }
 
 /* ═══════════════════════════════════════
+   SOBRE NÓS SECTION
+═══════════════════════════════════════ */
+#sobre-nos {
+  background: var(--white);
+  padding: 80px 40px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout style paint;
+  content-visibility: auto;
+}
+
+.sobre-nos-container {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* Imagem — lado esquerdo */
+.sobre-nos-image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.sobre-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  filter: drop-shadow(0 20px 60px rgba(255, 106, 0, 0.2));
+  object-fit: cover;
+  backface-visibility: hidden;
+  contain: layout style paint;
+}
+
+/* Conteúdo — lado direito */
+.sobre-nos-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.sobre-titulo {
+  font-family: var(--font-heading);
+  font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.sobre-subtitulo {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  color: var(--black);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  margin: 0;
+  text-shadow: 0 0 30px rgba(255, 106, 0, 0.08);
+}
+
+.sobre-texto {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  font-weight: 400;
+  line-height: 1.8;
+  color: #333333;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+/* Valores em grid */
+.sobre-valores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.valor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.valor-numero {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--orange);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.valor-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: #666666;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════ */
 @media (max-width: 900px) {
@@ -405,6 +535,21 @@ body {
   .barber-firstname {
     font-size: clamp(1.4rem, 5vw, 2.2rem);
   }
+
+  #sobre-nos {
+    padding: 60px 30px;
+    min-height: auto;
+  }
+
+  .sobre-nos-container {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .sobre-valores {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -422,5 +567,19 @@ body {
 
   .barber-card:not(.center) .barber-img {
     max-height: 45vh;
+  }
+
+  #sobre-nos {
+    padding: 40px 20px;
+  }
+
+  .sobre-nos-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .sobre-valores {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
