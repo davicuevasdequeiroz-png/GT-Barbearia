@@ -45,20 +45,21 @@
     <canvas id="hero-canvas"></canvas>
 
     <!-- NAV -->
-    <nav id="navbar">
+    <nav id="navbar" aria-label="Navegação principal">
       <div id="nav-logo" class="nav-logo">
         <span class="gt-logo-nav">GT</span>
       </div>
 
       <ul class="nav-links">
-        <li><a href="#" class="nav-link active">HOME</a></li>
-        <li><a href="#" class="nav-link">BARBEIROS</a></li>
-        <li><a href="#" class="nav-link">SERVICOS</a></li>
-        <li><a href="#" class="nav-link">CONTATO</a></li>
+        <li><a href="#hero" class="nav-link">HOME</a></li>
+        <li><a href="#barbers-container" class="nav-link">BARBEIROS</a></li>
+        <li><a href="#sobre-nos" class="nav-link">SOBRE NÓS</a></li>
+        <li><a href="#planos" class="nav-link">PLANOS</a></li>
+        <li><a href="#contato" class="nav-link">CONTATO</a></li>
       </ul>
 
       <div class="nav-social">
-        <a href="https://instagram.com/gtbarbearia16?utm_source=qr&stkn" target="_blank" class="social-icon"
+        <a href="https://instagram.com/gtbarbearia16?utm_source=qr&stkn" target="_blank" rel="noopener noreferrer" class="social-icon"
           id="social-instagram" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
             stroke-linejoin="round">
@@ -67,13 +68,13 @@
             <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
           </svg>
         </a>
-        <a href="https://wa.me/55" target="_blank" class="social-icon" id="social-whatsapp" aria-label="WhatsApp">
+        <a href="https://wa.me/5534997316923" target="_blank" rel="noopener noreferrer" class="social-icon" id="social-whatsapp" aria-label="WhatsApp">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
           </svg>
         </a>
-        <a href="https://tiktok.com" target="_blank" class="social-icon" id="social-tiktok" aria-label="TikTok">
+        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-icon" id="social-tiktok" aria-label="TikTok">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.67a8.18 8.18 0 004.78 1.52V6.73a4.86 4.86 0 01-1.01-.04z" />
@@ -81,6 +82,13 @@
         </a>
       </div>
     </nav>
+
+    <!-- Brush lettering above the team -->
+    <div class="hero-brand">
+      <h1 class="hero-title" aria-label="GT BARBEARIA">
+        <img class="hero-title-word hero-lettering" src="essencial/gt-barbearia-lettering-v2.png" alt="" width="2172" height="724" fetchpriority="high" />
+      </h1>
+    </div>
 
     <!-- BARBERS SHOWCASE -->
     <div id="barbers-container">
@@ -94,7 +102,7 @@
         <div class="barber-info">
           <span class="barber-firstname">YURI</span>
           <span class="barber-lastname">MAXIMO</span>
-          <span class="barber-instagram">@yuriwm_barber</span>
+          <a class="barber-instagram" href="https://instagram.com/yuriwm_barber/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram de yuriwm_barber">@yuriwm_barber</a>
         </div>
       </div>
 
@@ -107,7 +115,7 @@
         <div class="barber-info">
           <span class="barber-firstname">GUILHERME</span>
           <span class="barber-lastname">TEIXEIRA</span>
-          <span class="barber-instagram">@_guilhermeteixeira16__</span>
+          <a class="barber-instagram" href="https://instagram.com/_guilhermeteixeira16__/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram de _guilhermeteixeira16__">@_guilhermeteixeira16__</a>
         </div>
       </div>
 
@@ -120,48 +128,149 @@
         <div class="barber-info">
           <span class="barber-firstname">ZIDANE</span>
           <span class="barber-lastname">TRINDADE</span>
-          <span class="barber-instagram">@zidanebarbeiro_</span>
+          <a class="barber-instagram" href="https://instagram.com/zidanebarbeiro_/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram de zidanebarbeiro_">@zidanebarbeiro_</a>
         </div>
       </div>
 
     </div>
+    <div class="hero-actions">
+      <div class="hero-booking">
+        <p class="hero-location">UBERLÂNDIA <span aria-hidden="true">/</span> MG</p>
+        <a class="booking-link" href="https://instagram.com/gtbarbearia16/" target="_blank" rel="noopener noreferrer">
+          AGENDAR PELO INSTAGRAM <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <a class="hero-story" href="#sobre-nos">CONHEÇA NOSSA HISTÓRIA <span aria-hidden="true">↓</span></a>
+    </div>
+    <canvas id="hero-fog" aria-hidden="true"></canvas>
     <!-- BOTTOM GRADIENT OVERLAY -->
     <div id="hero-bottom-gradient"></div>
 
   </section>
 
   <!-- SOBRE NÓS SECTION -->
-  <section id="sobre-nos">
-    <div class="sobre-nos-container">
-      <div class="sobre-nos-image">
-        <img src="essencial/sobrenos1.png" alt="GT Barbearia" class="sobre-img" />
+  <section id="sobre-nos" aria-labelledby="sobre-heading">
+    <div class="sobre-shell">
+      <div class="sobre-section-label">
+        <p><span class="sobre-index">01 /</span> SOBRE NÓS</p>
       </div>
-      <div class="sobre-nos-content">
-        <h2 class="sobre-titulo">SOBRE NÓS</h2>
-        <h3 class="sobre-subtitulo">GT BARBEARIA</h3>
-        <p class="sobre-texto">
-          Com mais de 6 anos de excelência, a GT Barbearia se consolidou como referência de qualidade e estilo na região. 
-          Nosso compromisso é oferecer o melhor atendimento, trabalhando com dedicação para transformar cada visita em uma experiência 
-          memorável. Sob a liderança de Guilherme Teixeira, Zidane Trindade e Yuri Maximo, elevamos o conceito de barbearia tradicional 
-          para um novo patamar de profissionalismo e criatividade.
-        </p>
-        <div class="sobre-valores">
-          <div class="valor-item">
-            <span class="valor-numero">6+</span>
-            <span class="valor-label">Anos de Tradição</span>
+      <div class="sobre-nos-container">
+        <figure class="sobre-photo">
+          <div class="sobre-nos-image album-stage" id="sobre-album" data-current="0" role="group" aria-label="Álbum da história da GT Barbearia">
+            <div class="album-photo" data-photo="0" aria-hidden="false">
+              <img src="essencial/sobrenos1.png" alt="Barbeiro da GT finalizando um corte em 21 de julho de 2021" class="sobre-img" loading="lazy" />
+            </div>
+            <div class="album-photo" data-photo="1" aria-hidden="true">
+              <img src="essencial/sobrenos2.png" alt="Interior atual da GT Barbearia, com a equipe atendendo os clientes" class="sobre-img sobre-img-current" loading="lazy" />
+            </div>
+            <button class="album-next" type="button" aria-controls="sobre-album" aria-label="Mostrar foto atual da barbearia" title="Ver a próxima foto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </button>
           </div>
-          <div class="valor-item">
-            <span class="valor-numero">3</span>
-            <span class="valor-label">Barbeiros Experientes</span>
+          <figcaption class="sobre-caption"><span>GT BARBEARIA</span><span class="album-date" aria-live="polite" aria-atomic="true"><time datetime="2021-07-21">21 de julho de 2021</time></span></figcaption>
+          <p class="album-error" role="status" hidden>Não foi possível carregar a foto. Tente novamente.</p>
+        </figure>
+        <div class="sobre-nos-content">
+          <h2 class="sobre-titulo" id="sobre-heading"><span>NOSSA</span><span class="sobre-title-accent">HISTÓRIA.</span></h2>
+          <div class="sobre-copy">
+            <p class="sobre-lead">Mais de 6 anos de dedicação ao que fazemos.</p>
+            <p class="sobre-texto">A GT Barbearia se consolidou como referência de qualidade e estilo em Uberlândia. Nosso compromisso é oferecer o melhor atendimento e fazer de cada visita uma experiência memorável.</p>
           </div>
-          <div class="valor-item">
-            <span class="valor-numero">+1K</span>
-            <span class="valor-label">Clientes Satisfeitos</span>
-          </div>
+          <div class="sobre-signature"><span class="sobre-monogram" aria-hidden="true">GT</span><span>GUILHERME TEIXEIRA<br /><span class="sobre-signature-detail">"Pois tudo posso naquele que me fortalece"</span></span></div>
         </div>
       </div>
+      <div class="sobre-valores" aria-label="A GT em números">
+        <div class="valor-item"><span class="valor-numero">6<span class="valor-plus">+</span></span><span class="valor-label">Anos de<br />tradição</span></div>
+        <div class="valor-item"><span class="valor-numero">7</span><span class="valor-label">Barbeiros</span></div>
+        <div class="valor-item"><span class="valor-numero"><span class="valor-plus">+</span>1K</span><span class="valor-label">Clientes<br />satisfeitos</span></div>
+      </div>
+      <p class="sobre-closing">PRONTOS PARA TE ATENDER NAS DUAS UNIDADES!</p>
     </div>
   </section>
+
+  <section id="planos" aria-labelledby="planos-heading">
+    <div class="plans-shell">
+      <div class="plans-section-label"><span>02 /</span> CLUB GT</div>
+      <h2 class="plans-title" id="planos-heading">PLANOS DE <span>ASSINATURA.</span></h2>
+      <div class="plans-grid">
+        <article class="plan-card" aria-labelledby="plan-flesh">
+          <div class="plan-card-heading">
+            <h3 id="plan-flesh">FLESH<span>CLUB GT</span></h3>
+            <span class="plan-index" aria-hidden="true">01</span>
+          </div>
+          <p class="plan-benefit">Corte ilimitado</p>
+          <p class="plan-price"><span class="plan-currency">R$</span> <strong>74,99</strong><span class="plan-period">/mês</span></p>
+          <a class="plan-button" href="https://wa.me/5534997316923?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Flesh%20Club%20GT%2C%20por%20R%24%2074%2C99%2Fm%C3%AAs." target="_blank" rel="noopener noreferrer" aria-label="Consultar Flesh Club GT pelo WhatsApp">
+            QUERO O FLESH <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        </article>
+        <article class="plan-card" aria-labelledby="plan-elite">
+          <div class="plan-card-heading">
+            <h3 id="plan-elite">ELITE<span>CLUB GT</span></h3>
+            <span class="plan-index" aria-hidden="true">02</span>
+          </div>
+          <p class="plan-benefit">Corte + Sobrancelha ilimitados</p>
+          <p class="plan-price"><span class="plan-currency">R$</span> <strong>104,99</strong><span class="plan-period">/mês</span></p>
+          <a class="plan-button" href="https://wa.me/5534997316923?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Elite%20Club%20GT%2C%20por%20R%24%20104%2C99%2Fm%C3%AAs." target="_blank" rel="noopener noreferrer" aria-label="Consultar Elite Club GT pelo WhatsApp">
+            QUERO O ELITE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        </article>
+        <article class="plan-card" aria-labelledby="plan-royal">
+          <div class="plan-card-heading">
+            <h3 id="plan-royal">ROYAL<span>CLUB GT</span></h3>
+            <span class="plan-index" aria-hidden="true">03</span>
+          </div>
+          <p class="plan-benefit">Corte + Barba ilimitados</p>
+          <p class="plan-price"><span class="plan-currency">R$</span> <strong>139,99</strong><span class="plan-period">/mês</span></p>
+          <a class="plan-button" href="https://wa.me/5534997316923?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Royal%20Club%20GT%2C%20por%20R%24%20139%2C99%2Fm%C3%AAs." target="_blank" rel="noopener noreferrer" aria-label="Consultar Royal Club GT pelo WhatsApp">
+            QUERO O ROYAL <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        </article>
+      </div>
+      <p class="plans-units">ASSINANTES CORTAM NAS DUAS UNIDADES</p>
+    </div>
+  </section>
+
+  <footer id="contato" class="site-footer">
+    <div class="footer-shell">
+      <section id="unidades" aria-labelledby="locations-heading">
+        <div class="footer-section-label"><span>03 /</span> NOSSAS UNIDADES</div>
+        <h2 class="locations-title" id="locations-heading">ENCONTRE A SUA GT.</h2>
+        <div class="locations-grid">
+          <article class="location-card" aria-labelledby="unit-1">
+            <div class="location-map" data-lenis-prevent>
+              <iframe src="https://maps.google.com/maps?q=Avenida%20Doutor%20Misael%20Rodrigues%20de%20Castro%2C%202159%2C%20Uberl%C3%A2ndia%2C%20MG%2C%20Brasil&amp;z=16&amp;output=embed" title="Mapa da unidade 1: Avenida Doutor Misael Rodrigues de Castro, 2159" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            </div>
+            <div class="location-details">
+              <div><h3 id="unit-1">UNIDADE 01</h3><address>Avenida Doutor Misael Rodrigues de Castro, 2159<br /><span>Uberlândia, MG</span></address></div>
+              <a class="location-route" href="https://www.google.com/maps/dir/?api=1&amp;destination=Avenida%20Doutor%20Misael%20Rodrigues%20de%20Castro%2C%202159%2C%20Uberl%C3%A2ndia%2C%20MG%2C%20Brasil" target="_blank" rel="noopener noreferrer" aria-label="Traçar rota para a unidade 1">TRAÇAR ROTA <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6h12v12" /></svg></a>
+            </div>
+          </article>
+          <article class="location-card" aria-labelledby="unit-2">
+            <div class="location-map" data-lenis-prevent>
+              <iframe src="https://maps.google.com/maps?q=Avenida%20Angelino%20Favato%2C%20247%2C%20Uberl%C3%A2ndia%2C%20MG%2C%20Brasil&amp;z=16&amp;output=embed" title="Mapa da unidade 2: Avenida Angelino Favato, 247" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            </div>
+            <div class="location-details">
+              <div><h3 id="unit-2">UNIDADE 02</h3><address>Avenida Angelino Favato, 247<br /><span>Uberlândia, MG</span></address></div>
+              <a class="location-route" href="https://www.google.com/maps/dir/?api=1&amp;destination=Avenida%20Angelino%20Favato%2C%20247%2C%20Uberl%C3%A2ndia%2C%20MG%2C%20Brasil" target="_blank" rel="noopener noreferrer" aria-label="Traçar rota para a unidade 2">TRAÇAR ROTA <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6h12v12" /></svg></a>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section class="footer-contact" aria-labelledby="contact-heading">
+        <div class="footer-contact-intro"><p class="footer-eyebrow">FALE COM A GENTE</p><h2 id="contact-heading">SEU PRÓXIMO<br />CORTE É AQUI.</h2></div>
+        <div class="footer-contact-links">
+          <a class="footer-whatsapp" href="https://wa.me/5534997316923" target="_blank" rel="noopener noreferrer"><span><small>AGENDAMENTOS PELO WHATSAPP</small><strong>(34) 99731-6923</strong></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6h12v12" /></svg></a>
+          <a class="footer-instagram" href="https://instagram.com/gtbarbearia16/" target="_blank" rel="noopener noreferrer"><span><small>INSTAGRAM</small><strong>@gtbarbearia16</strong></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6h12v12" /></svg></a>
+        </div>
+      </section>
+      <div class="footer-bottom">
+        <a class="footer-brand" href="#hero" aria-label="GT Barbearia, voltar ao início">GT <span>BARBEARIA</span></a>
+        <nav class="footer-nav" aria-label="Navegação do rodapé"><a href="#hero">INÍCIO</a><a href="#sobre-nos">NOSSA HISTÓRIA</a><a href="#planos">PLANOS</a></nav>
+        <a class="footer-top" href="#hero">VOLTAR AO TOPO <span aria-hidden="true">&uarr;</span></a>
+      </div>
+    </div>
+  </footer>
 
   <script src="main.js"></script>
 </body>
