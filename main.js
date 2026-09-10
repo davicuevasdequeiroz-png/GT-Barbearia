@@ -375,6 +375,8 @@ function initHeroShader() {
   resize();
 }
 
+let desktopLenis = null;
+
 function initLenis() {
   // Touch scrolling stays entirely native; desktop smoothing has a clean teardown.
   gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
@@ -384,12 +386,14 @@ function initLenis() {
       smoothWheel: true,
       syncTouch: false,
     });
+    desktopLenis = lenis;
     const tick = time => lenis.raf(time * 1000);
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
     return () => {
       gsap.ticker.remove(tick);
+      desktopLenis = null;
       lenis.destroy();
     };
   });
@@ -597,7 +601,54 @@ function initFooterAnimations() {
   });
 }
 
+function initAnchorNavigation() {
+  let animation = null;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cancel = () => { if (animation) { animation.kill(); animation = null; } };
+  const setScroll = y => {
+    if (desktopLenis) desktopLenis.scrollTo(y, { immediate: true });
+    else window.scrollTo({ top: y, behavior: 'instant' });
+  };
+  window.addEventListener('wheel', cancel, { passive: true });
+  window.addEventListener('touchstart', cancel, { passive: true });
+  window.addEventListener('keydown', event => {
+    if (['Escape', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) cancel();
+  });
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+    const hash = link.getAttribute('href');
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+    event.preventDefault();
+    cancel();
+    const offset = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const destination = Math.max(0, Math.min(maxScroll, window.scrollY + target.getBoundingClientRect().top - offset));
+    const finish = () => {
+      animation = null;
+      if (window.location.hash !== hash) history.pushState(null, '', hash);
+      const needsTabIndex = !target.hasAttribute('tabindex');
+      if (needsTabIndex) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      if (needsTabIndex) target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    };
+    if (reducedMotion.matches || Math.abs(destination - window.scrollY) < 2) {
+      setScroll(destination);
+      finish();
+      return;
+    }
+    const position = { y: window.scrollY };
+    animation = gsap.to(position, {
+      y: destination, duration: 0.55, ease: 'power2.inOut',
+      onUpdate: () => setScroll(position.y),
+      onComplete: finish,
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  initAnchorNavigation();
   initFooterAnimations();
   initPlansAnimations();
   initSobreAlbum();
