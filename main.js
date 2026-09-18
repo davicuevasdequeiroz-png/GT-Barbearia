@@ -125,7 +125,7 @@ const DESKTOP_MOTION_QUERY = '(min-width: 901px) and (hover: hover) and (pointer
   // ── 1. Precarrega todas as imagens dos barbeiros ──
   const imageSrcs = [
     'essencial/gt-barbearia-lettering-v2.png',
-    'essencial/yuri.png',
+    'essencial/Carlim.png',
     'essencial/gulherme.png',
     'essencial/zidane.png',
   ];
@@ -298,79 +298,81 @@ function initHeroShader() {
     }
   `;
   function createLayer(canvas, fragment, alpha) {
-    const gl=canvas.getContext('webgl', { alpha, premultipliedAlpha: false, antialias: false });
+    const gl = canvas.getContext('webgl', { alpha, premultipliedAlpha: false, antialias: false });
     if (!gl) return null;
-    const program=gl.createProgram();
-    for (const [type, source] of [[gl.VERTEX_SHADER,vertex],[gl.FRAGMENT_SHADER,fragment]]) {
-      const shader=gl.createShader(type);
-      gl.shaderSource(shader,source); gl.compileShader(shader);
-      if (!gl.getShaderParameter(shader,gl.COMPILE_STATUS)) {
-        console.warn('Hero shader unavailable:',gl.getShaderInfoLog(shader));
+    const program = gl.createProgram();
+    for (const [type, source] of [[gl.VERTEX_SHADER, vertex], [gl.FRAGMENT_SHADER, fragment]]) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source); gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.warn('Hero shader unavailable:', gl.getShaderInfoLog(shader));
         gl.deleteShader(shader); gl.deleteProgram(program); return null;
       }
-      gl.attachShader(program,shader); gl.deleteShader(shader);
+      gl.attachShader(program, shader); gl.deleteShader(shader);
     }
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program,gl.LINK_STATUS)) {
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       gl.deleteProgram(program); return null;
     }
     gl.useProgram(program);
-    const buffer=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-    const pos=gl.getAttribLocation(program,'a_position');
-    gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
-    return { canvas, gl, time:gl.getUniformLocation(program,'u_time'),
-      resolution:gl.getUniformLocation(program,'u_resolution'),mouse:gl.getUniformLocation(program,'u_mouse') };
+    const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const pos = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+    return {
+      canvas, gl, time: gl.getUniformLocation(program, 'u_time'),
+      resolution: gl.getUniformLocation(program, 'u_resolution'), mouse: gl.getUniformLocation(program, 'u_mouse')
+    };
   }
-  const layers=[createLayer(document.getElementById('hero-canvas'),background,false)].filter(Boolean);
-  let frame=0, previous=0, elapsed=0, visible=true;
+  const layers = [createLayer(document.getElementById('hero-canvas'), background, false)].filter(Boolean);
+  let frame = 0, previous = 0, elapsed = 0, visible = true;
   function render(now) {
-    frame=0;
-    if (!visible || document.hidden || !desktopMotion.matches) { previous=0; return; }
-    if (previous && now-previous<32) { frame=requestAnimationFrame(render); return; }
-    if (previous && !motion.matches) elapsed+=Math.min(now-previous,100)/1000;
-    previous=now;
-    smooth.x+=(pointer.x-smooth.x)*0.14; smooth.y+=(pointer.y-smooth.y)*0.14;
+    frame = 0;
+    if (!visible || document.hidden || !desktopMotion.matches) { previous = 0; return; }
+    if (previous && now - previous < 32) { frame = requestAnimationFrame(render); return; }
+    if (previous && !motion.matches) elapsed += Math.min(now - previous, 100) / 1000;
+    previous = now;
+    smooth.x += (pointer.x - smooth.x) * 0.14; smooth.y += (pointer.y - smooth.y) * 0.14;
     for (const layer of layers) {
-      const {gl,canvas}=layer;
-      gl.uniform1f(layer.time,motion.matches ? 0 : elapsed);
-      gl.uniform2f(layer.resolution,canvas.width,canvas.height);
-      gl.uniform2f(layer.mouse,smooth.x,smooth.y);
-      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+      const { gl, canvas } = layer;
+      gl.uniform1f(layer.time, motion.matches ? 0 : elapsed);
+      gl.uniform2f(layer.resolution, canvas.width, canvas.height);
+      gl.uniform2f(layer.mouse, smooth.x, smooth.y);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
-    if (!motion.matches) frame=requestAnimationFrame(render);
+    if (!motion.matches) frame = requestAnimationFrame(render);
   }
-  function wake() { if (!frame && visible && !document.hidden && desktopMotion.matches) frame=requestAnimationFrame(render); }
+  function wake() { if (!frame && visible && !document.hidden && desktopMotion.matches) frame = requestAnimationFrame(render); }
   function resize() {
-    for (const {canvas,gl} of layers) {
-      const rect=canvas.getBoundingClientRect();
-      const scale=Math.min(window.devicePixelRatio || 1,1.25,1440/Math.max(rect.width,1));
-      canvas.width=Math.max(1,Math.round(rect.width*scale));
-      canvas.height=Math.max(1,Math.round(rect.height*scale));
-      gl.viewport(0,0,canvas.width,canvas.height);
+    for (const { canvas, gl } of layers) {
+      const rect = canvas.getBoundingClientRect();
+      const scale = Math.min(window.devicePixelRatio || 1, 1.25, 1440 / Math.max(rect.width, 1));
+      canvas.width = Math.max(1, Math.round(rect.width * scale));
+      canvas.height = Math.max(1, Math.round(rect.height * scale));
+      gl.viewport(0, 0, canvas.width, canvas.height);
     }
     wake();
   }
-  hero.addEventListener('pointermove', event=>{
-    if (motion.matches || event.pointerType==='touch') return;
-    const rect=hero.getBoundingClientRect();
-    pointer.x=(event.clientX-rect.left)/rect.width;
-    pointer.y=1-(event.clientY-rect.top)/rect.height;
-  },{passive:true});
-  hero.addEventListener('pointerleave',()=>{pointer.x=0.5;pointer.y=0.4;});
+  hero.addEventListener('pointermove', event => {
+    if (motion.matches || event.pointerType === 'touch') return;
+    const rect = hero.getBoundingClientRect();
+    pointer.x = (event.clientX - rect.left) / rect.width;
+    pointer.y = 1 - (event.clientY - rect.top) / rect.height;
+  }, { passive: true });
+  hero.addEventListener('pointerleave', () => { pointer.x = 0.5; pointer.y = 0.4; });
   new ResizeObserver(resize).observe(hero);
-  hero.querySelectorAll('.barber-img').forEach(img=>img.addEventListener('load',resize,{once:true}));
+  hero.querySelectorAll('.barber-img').forEach(img => img.addEventListener('load', resize, { once: true }));
   document.fonts.ready.then(resize);
-  new IntersectionObserver(([entry])=>{
-    visible=entry.isIntersecting;
-    if (!visible) { cancelAnimationFrame(frame); frame=0; previous=0; } else wake();
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (!visible) { cancelAnimationFrame(frame); frame = 0; previous = 0; } else wake();
   }).observe(hero);
-  document.addEventListener('visibilitychange',()=>{
-    if (document.hidden) { cancelAnimationFrame(frame); frame=0; previous=0; } else wake();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { cancelAnimationFrame(frame); frame = 0; previous = 0; } else wake();
   });
-  motion.addEventListener('change',()=>{previous=0;wake();});
+  motion.addEventListener('change', () => { previous = 0; wake(); });
   desktopMotion.addEventListener('change', () => {
-    cancelAnimationFrame(frame); frame=0; previous=0; wake();
+    cancelAnimationFrame(frame); frame = 0; previous = 0; wake();
   });
   resize();
 }
@@ -439,7 +441,20 @@ function initBarberHover() {
   });
 }
 
+function animateUnitLabel() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const label = document.querySelector(window.matchMedia('(min-width: 901px)').matches
+    ? '.hero-unit-desktop'
+    : '.barber-group:not([hidden]) .barber-group-unit');
+  if (!label) return;
+  gsap.fromTo(label.querySelectorAll('.unit-pin, .unit-copy'),
+    { opacity: 0, y: 8 },
+    { opacity: 1, y: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', overwrite: true, clearProps: 'transform,opacity' });
+}
+
 function initHeroAnimations() {
+  document.dispatchEvent(new Event('hero-ready'));
+  animateUnitLabel();
   if (!window.matchMedia(DESKTOP_MOTION_QUERY).matches) {
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       gsap.from('.hero-brand, .barber-card, .hero-actions', { opacity: 0, duration: 0.45, stagger: 0.05, clearProps: 'opacity' });
@@ -647,7 +662,127 @@ function initAnchorNavigation() {
   });
 }
 
+function initBarberCarousel() {
+  const container = document.getElementById('barbers-container');
+  const groups = [...container.querySelectorAll('.barber-group')];
+  const previous = container.querySelector('.barber-carousel-prev');
+  const next = container.querySelector('.barber-carousel-next');
+  const status = container.querySelector('.barber-carousel-status');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = window.matchMedia('(max-width: 600px)');
+  const autoplay = container.querySelector('.barber-autoplay');
+  const cards = groups.flatMap((group, groupIndex) => [...group.querySelectorAll('.barber-card')].map(card => ({ card, groupIndex })));
+  let current = 0;
+  let currentCard = 0;
+  let busy = false;
+  let revision = 0;
+  let timer;
+  let paused = reducedMotion.matches;
+  let heroVisible = false;
+  let heroReady = document.getElementById('preloader').style.display === 'none';
+  const animate = (element, options) => new Promise(resolve => gsap.to(element, { ...options, onComplete: resolve, onInterrupt: resolve }));
+  function schedule() {
+    clearTimeout(timer);
+    if (!mobile.matches || paused || busy || !heroReady || !heroVisible || document.hidden || container.querySelector('.barber-card a:focus')) return;
+    timer = setTimeout(() => showGroup(1, true), 5000);
+  }
+  function updatePause() {
+    autoplay.setAttribute('aria-pressed', String(paused));
+    autoplay.setAttribute('aria-label', paused ? 'Retomar troca automática' : 'Pausar troca automática');
+    schedule();
+  }
+  function setBusy(value) {
+    busy = value;
+    previous.setAttribute('aria-disabled', String(value));
+    next.setAttribute('aria-disabled', String(value));
+    container.setAttribute('aria-busy', String(value));
+  }
+  function render() {
+    groups.forEach((group, index) => { group.hidden = index !== current; });
+    cards.forEach(({ card }, index) => { card.hidden = mobile.matches && index !== currentCard; });
+    document.querySelector('.hero-unit-desktop .unit-name').textContent = groups[current].dataset.unit;
+  }
+  function syncLayout() {
+    revision++;
+    gsap.killTweensOf(groups);
+    gsap.set(groups, { clearProps: 'transform,opacity' });
+    currentCard = cards.findIndex(item => item.groupIndex === current);
+    render();
+    previous.setAttribute('aria-label', mobile.matches ? 'Mostrar barbeiro anterior' : 'Mostrar grupo anterior de barbeiros');
+    next.setAttribute('aria-label', mobile.matches ? 'Mostrar próximo barbeiro' : 'Mostrar próximo grupo de barbeiros');
+    setBusy(false);
+    schedule();
+  }
+  async function showGroup(direction, automatic = false) {
+    if (busy) return;
+    clearTimeout(timer);
+    setBusy(true);
+    const version = revision;
+    status.classList.remove('is-error');
+    const cardIndex = (currentCard + direction + cards.length) % cards.length;
+    const index = mobile.matches ? cards[cardIndex].groupIndex : (current + direction + groups.length) % groups.length;
+    const outgoing = groups[current];
+    const incoming = groups[index];
+    try {
+      await Promise.all([...incoming.querySelectorAll('img')].map(image => {
+        if (!image.getAttribute('src')) image.src = image.dataset.src;
+        return image.decode();
+      }));
+      if (version !== revision) return;
+      if (!reducedMotion.matches) await animate(outgoing, { x: -direction * 44, opacity: 0, duration: 0.22, ease: 'power2.in' });
+      if (version !== revision) return;
+      current = index;
+      currentCard = mobile.matches ? cardIndex : cards.findIndex(item => item.groupIndex === index);
+      render();
+      animateUnitLabel();
+      gsap.set(outgoing, { clearProps: 'transform,opacity' });
+      if (!reducedMotion.matches) {
+        gsap.set(incoming, { x: direction * 44, opacity: 0 });
+        await animate(incoming, { x: 0, opacity: 1, duration: 0.42, ease: 'power3.out', clearProps: 'transform,opacity' });
+      }
+      if (version !== revision) return;
+      if (!automatic) {
+        status.textContent = mobile.matches
+          ? 'Barbeiro ' + (currentCard + 1) + ' de ' + cards.length + ': ' + cards[currentCard].card.querySelector('img').alt + '. Unidade ' + incoming.dataset.unit + '.'
+          : 'Grupo ' + (index + 1) + ' de ' + groups.length + ': ' + [...incoming.querySelectorAll('img')].map(image => image.alt).join(', ') + '. Unidade ' + incoming.dataset.unit + '.';
+      }
+      if (!mobile.matches) ScrollTrigger.refresh();
+    } catch {
+      if (version !== revision) return;
+      status.textContent = 'Não foi possível carregar as fotos. Tente novamente.';
+      status.classList.add('is-error');
+    } finally {
+      if (version === revision) {
+        setBusy(false);
+        schedule();
+      }
+    }
+  }
+  previous.addEventListener('click', () => showGroup(-1));
+  next.addEventListener('click', () => showGroup(1));
+  [previous, next].forEach(button => button.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      showGroup(event.key === 'ArrowRight' ? 1 : -1);
+    }
+  }));
+  autoplay.addEventListener('click', () => { paused = !paused; updatePause(); });
+  mobile.addEventListener('change', syncLayout);
+  reducedMotion.addEventListener('change', () => { paused = reducedMotion.matches; updatePause(); });
+  document.addEventListener('visibilitychange', schedule);
+  document.addEventListener('hero-ready', () => { heroReady = true; schedule(); }, { once: true });
+  container.addEventListener('focusin', schedule);
+  container.addEventListener('focusout', () => queueMicrotask(schedule));
+  new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+    schedule();
+  }, { threshold: 0.25 }).observe(container);
+  syncLayout();
+  updatePause();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  initBarberCarousel();
   initAnchorNavigation();
   initFooterAnimations();
   initPlansAnimations();
