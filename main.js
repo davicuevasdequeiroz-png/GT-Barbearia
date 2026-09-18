@@ -254,7 +254,8 @@ const DESKTOP_MOTION_QUERY = '(min-width: 901px) and (hover: hover) and (pointer
 ───────────────────────────────────────── */
 function initHeroShader() {
   const desktopMotion = window.matchMedia(DESKTOP_MOTION_QUERY);
-  if (!desktopMotion.matches) return;
+  const mobileShader = window.matchMedia('(max-width: 600px)');
+  const shaderEnabled = () => desktopMotion.matches || mobileShader.matches;
   const hero = document.getElementById('hero');
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pointer = { x: 0.5, y: 0.4 };
@@ -325,13 +326,18 @@ function initHeroShader() {
     };
   }
   const layers = [createLayer(document.getElementById('hero-canvas'), background, false)].filter(Boolean);
+  if (!layers.length) { document.getElementById('hero-canvas').style.display = 'none'; return; }
   let frame = 0, previous = 0, elapsed = 0, visible = true;
   function render(now) {
     frame = 0;
-    if (!visible || document.hidden || !desktopMotion.matches) { previous = 0; return; }
-    if (previous && now - previous < 32) { frame = requestAnimationFrame(render); return; }
+    if (!visible || document.hidden || !shaderEnabled()) { previous = 0; return; }
+    if (previous && now - previous < (mobileShader.matches ? 50 : 32)) { frame = requestAnimationFrame(render); return; }
     if (previous && !motion.matches) elapsed += Math.min(now - previous, 100) / 1000;
     previous = now;
+    if (mobileShader.matches) {
+      pointer.x = 0.5 + Math.sin(elapsed * 0.24) * 0.32;
+      pointer.y = 0.5 + Math.cos(elapsed * 0.18) * 0.22;
+    }
     smooth.x += (pointer.x - smooth.x) * 0.14; smooth.y += (pointer.y - smooth.y) * 0.14;
     for (const layer of layers) {
       const { gl, canvas } = layer;
@@ -342,11 +348,11 @@ function initHeroShader() {
     }
     if (!motion.matches) frame = requestAnimationFrame(render);
   }
-  function wake() { if (!frame && visible && !document.hidden && desktopMotion.matches) frame = requestAnimationFrame(render); }
+  function wake() { if (!frame && visible && !document.hidden && shaderEnabled()) frame = requestAnimationFrame(render); }
   function resize() {
     for (const { canvas, gl } of layers) {
       const rect = canvas.getBoundingClientRect();
-      const scale = Math.min(window.devicePixelRatio || 1, 1.25, 1440 / Math.max(rect.width, 1));
+      const scale = Math.min(window.devicePixelRatio || 1, mobileShader.matches ? 0.75 : 1.25, 1440 / Math.max(rect.width, 1));
       canvas.width = Math.max(1, Math.round(rect.width * scale));
       canvas.height = Math.max(1, Math.round(rect.height * scale));
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -354,7 +360,7 @@ function initHeroShader() {
     wake();
   }
   hero.addEventListener('pointermove', event => {
-    if (motion.matches || event.pointerType === 'touch') return;
+    if (mobileShader.matches || motion.matches || event.pointerType === 'touch') return;
     const rect = hero.getBoundingClientRect();
     pointer.x = (event.clientX - rect.left) / rect.width;
     pointer.y = 1 - (event.clientY - rect.top) / rect.height;
@@ -371,6 +377,9 @@ function initHeroShader() {
     if (document.hidden) { cancelAnimationFrame(frame); frame = 0; previous = 0; } else wake();
   });
   motion.addEventListener('change', () => { previous = 0; wake(); });
+  mobileShader.addEventListener('change', () => {
+    cancelAnimationFrame(frame); frame = 0; previous = 0; resize();
+  });
   desktopMotion.addEventListener('change', () => {
     cancelAnimationFrame(frame); frame = 0; previous = 0; wake();
   });
@@ -444,6 +453,7 @@ function initBarberHover() {
 function animateUnitLabel() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const label = document.querySelector(window.matchMedia('(min-width: 901px)').matches
+    || window.matchMedia('(max-width: 600px)').matches
     ? '.hero-unit-desktop'
     : '.barber-group:not([hidden]) .barber-group-unit');
   if (!label) return;
@@ -670,27 +680,21 @@ function initBarberCarousel() {
   const status = container.querySelector('.barber-carousel-status');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = window.matchMedia('(max-width: 600px)');
-  const autoplay = container.querySelector('.barber-autoplay');
   const cards = groups.flatMap((group, groupIndex) => [...group.querySelectorAll('.barber-card')].map(card => ({ card, groupIndex })));
   let current = 0;
   let currentCard = 0;
   let busy = false;
   let revision = 0;
   let timer;
-  let paused = reducedMotion.matches;
   let heroVisible = false;
   let heroReady = document.getElementById('preloader').style.display === 'none';
   const animate = (element, options) => new Promise(resolve => gsap.to(element, { ...options, onComplete: resolve, onInterrupt: resolve }));
   function schedule() {
     clearTimeout(timer);
-    if (!mobile.matches || paused || busy || !heroReady || !heroVisible || document.hidden || container.querySelector('.barber-card a:focus')) return;
+    if (!mobile.matches || reducedMotion.matches || busy || !heroReady || !heroVisible || document.hidden || container.querySelector('.barber-card a:focus')) return;
     timer = setTimeout(() => showGroup(1, true), 5000);
   }
-  function updatePause() {
-    autoplay.setAttribute('aria-pressed', String(paused));
-    autoplay.setAttribute('aria-label', paused ? 'Retomar troca automática' : 'Pausar troca automática');
-    schedule();
-  }
+
   function setBusy(value) {
     busy = value;
     previous.setAttribute('aria-disabled', String(value));
@@ -766,9 +770,8 @@ function initBarberCarousel() {
       showGroup(event.key === 'ArrowRight' ? 1 : -1);
     }
   }));
-  autoplay.addEventListener('click', () => { paused = !paused; updatePause(); });
   mobile.addEventListener('change', syncLayout);
-  reducedMotion.addEventListener('change', () => { paused = reducedMotion.matches; updatePause(); });
+  reducedMotion.addEventListener('change', schedule);
   document.addEventListener('visibilitychange', schedule);
   document.addEventListener('hero-ready', () => { heroReady = true; schedule(); }, { once: true });
   container.addEventListener('focusin', schedule);
@@ -778,7 +781,7 @@ function initBarberCarousel() {
     schedule();
   }, { threshold: 0.25 }).observe(container);
   syncLayout();
-  updatePause();
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {

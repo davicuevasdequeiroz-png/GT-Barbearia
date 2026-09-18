@@ -1941,15 +1941,15 @@ a:focus-visible {
 }
 
 /* Individual portraits and automatic rotation are exclusive to phones. */
-.barber-autoplay { display: none; }
+
 @media (max-width: 600px) {
   .barber-card[hidden] { display: none !important; }
   #barbers-container .barber-card {
-    flex: 0 1 270px;
-    width: 270px;
+    flex: 0 1 370px;
+    width: 370px;
     max-width: 100%;
   }
-  #barbers-container .barber-img-wrap { height: clamp(200px, 34svh, 310px); }
+  #barbers-container .barber-img-wrap { height: clamp(280px, 49svh, 460px); }
   #barbers-container .barber-img {
     width: 100%; height: 100%; max-height: none;
     aspect-ratio: auto; object-fit: contain; object-position: bottom center;
@@ -1958,16 +1958,67 @@ a:focus-visible {
   #barbers-container .barber-firstname { font-size: 32px; }
   #barbers-container .barber-lastname { font-size: 14px; min-height: 1.3em; }
   #barbers-container .barber-instagram { font-size: 12px; }
-  .barber-autoplay {
-    position: absolute; right: 0; top: calc(42% + 52px); z-index: 9;
-    display: grid; place-items: center; width: 44px; height: 44px;
-    padding: 10px; border: 0; background: transparent; color: #b8afa8;
-    cursor: pointer; -webkit-tap-highlight-color: transparent;
+
+}
+
+/* Phone hero: location masthead, full-size portrait and two clear actions. */
+@media (max-width: 600px) {
+  #hero-canvas { display: block; opacity: 0.72; pointer-events: none; }
+  #barbers-container { padding-inline: 28px; bottom: 86px; }
+  .barber-group { padding-bottom: 0; }
+  .barber-group-unit { display: none; }
+  .hero-brand { top: 142px; }
+  .hero-unit-desktop {
+    position: absolute; top: 96px; left: 50%; transform: translateX(-50%);
+    z-index: 4; display: flex; align-items: center; justify-content: center;
+    gap: 9px; width: max-content; max-width: calc(100% - 32px);
+    color: var(--white); text-transform: uppercase;
   }
-  .barber-autoplay svg { width: 20px; height: 20px; }
-  .barber-autoplay .autoplay-play { display: none; }
-  .barber-autoplay[aria-pressed="true"] .autoplay-pause { display: none; }
-  .barber-autoplay[aria-pressed="true"] .autoplay-play { display: block; }
-  .barber-autoplay:hover, .barber-autoplay:focus-visible { color: var(--orange); }
-  .barber-autoplay:focus-visible { outline: 2px solid var(--orange); outline-offset: 1px; }
+  .hero-unit-desktop::before, .hero-unit-desktop::after {
+    content: ''; width: 18px; height: 1px; background: #995421;
+  }
+  .hero-unit-desktop .unit-pin { width: 15px; height: 18px; }
+  .hero-unit-desktop .unit-copy { flex-direction: row; align-items: center; gap: 7px; }
+  .hero-unit-desktop .unit-label { font-size: 9px; letter-spacing: 0.12em; }
+  .hero-unit-desktop .unit-name { font-size: 15px; letter-spacing: 0.025em; }
+  .hero-actions { bottom: 16px; gap: 16px; align-items: center; }
+  .hero-booking { flex: 1; min-width: 0; }
+  .booking-link { width: 100%; justify-content: center; padding: 12px 8px; font-size: 11px; }
+  .hero-story { flex: 0 1 128px; max-width: 128px; font-size: 11px; }
+}
+@media (max-width: 360px) {
+  .hero-unit-desktop { gap: 6px; }
+  .hero-unit-desktop::before, .hero-unit-desktop::after { width: 10px; }
+  .hero-unit-desktop .unit-name { font-size: 14px; }
+}
+
+/* Align the visible portraits, rather than the PNGs' transparent margins. */
+@media (max-width: 600px) {
+  #barbers-container {
+    /* The lettering's painted bottom is 616 / 2172 of its 94vw width. */
+    top: calc(142px + 26.66vw);
+    bottom: auto;
+    padding-inline: 48px;
+  }
+  #barbers-container .barber-card {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+  #barbers-container .barber-img-wrap {
+    height: min(calc(max(700px, 100svh) - 320px - 26.66vw), calc((100vw - 96px) * 1.17));
+    overflow: hidden;
+  }
+  #barbers-container .barber-img {
+    position: absolute;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    height: calc(100% * var(--portrait-height, 1));
+    object-fit: contain;
+  }
+  #barber-carlos, #barber-yuri { --portrait-height: 1.0255; }
+  #barber-guilherme { --portrait-height: 1.13125; }
+  #barber-zidane { --portrait-height: 1.0112; }
+  #barber-kauan { --portrait-height: 1.003; }
 }
