@@ -266,6 +266,7 @@ function initHeroShader() {
     uniform float u_time;
     uniform vec2 u_resolution;
     uniform vec2 u_mouse;
+    uniform float u_mobile;
     float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
     float noise(vec2 p){
       vec2 i=floor(p),f=fract(p); f=f*f*(3.0-2.0*f);
@@ -281,8 +282,10 @@ function initHeroShader() {
   const background = noiseSource + `
     void main(){
       vec2 uv=gl_FragCoord.xy/u_resolution;
-      float t=u_time*0.028;
-      vec2 p=uv*vec2(3.2,2.2)+(u_mouse-0.5)*0.08;
+      float t=u_time*mix(0.028,0.075,u_mobile);
+      vec2 desktopUV=uv*vec2(3.2,2.2);
+      vec2 mobileUV=(uv-0.5)*vec2(u_resolution.x/u_resolution.y,1.0)*3.8;
+      vec2 p=mix(desktopUV,mobileUV,u_mobile)+(u_mouse-0.5)*0.08;
       vec2 warp=vec2(fbm(p+vec2(t,-t)),fbm(p+vec2(7.3,-t*0.7)));
       float cloud=fbm(p+warp*1.4+vec2(-t,t*0.4));
       float texture=smoothstep(0.35,0.75,cloud);
@@ -293,7 +296,7 @@ function initHeroShader() {
       vec3 col=vec3(0.024,0.012,0.008);
       col+=vec3(0.30,0.095,0.014)*smoothstep(0.20,0.75,cloud)*edge;
       col+=vec3(0.12,0.034,0.005)*texture*sides*edge;
-      col+=vec3(0.38,0.14,0.022)*halo;
+      col+=vec3(0.38,0.14,0.022)*halo*mix(1.0,0.8,u_mobile);
       col*=0.65+0.35*smoothstep(0.0,0.2,uv.y);
       gl_FragColor=vec4(col,1.0);
     }
@@ -322,7 +325,8 @@ function initHeroShader() {
     gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
     return {
       canvas, gl, time: gl.getUniformLocation(program, 'u_time'),
-      resolution: gl.getUniformLocation(program, 'u_resolution'), mouse: gl.getUniformLocation(program, 'u_mouse')
+      resolution: gl.getUniformLocation(program, 'u_resolution'), mouse: gl.getUniformLocation(program, 'u_mouse'),
+      mobile: gl.getUniformLocation(program, 'u_mobile')
     };
   }
   const layers = [createLayer(document.getElementById('hero-canvas'), background, false)].filter(Boolean);
@@ -342,6 +346,7 @@ function initHeroShader() {
     for (const layer of layers) {
       const { gl, canvas } = layer;
       gl.uniform1f(layer.time, motion.matches ? 0 : elapsed);
+      gl.uniform1f(layer.mobile, mobileShader.matches ? 1 : 0);
       gl.uniform2f(layer.resolution, canvas.width, canvas.height);
       gl.uniform2f(layer.mouse, smooth.x, smooth.y);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -681,17 +686,21 @@ function initBarberCarousel() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = window.matchMedia('(max-width: 600px)');
   const cards = groups.flatMap((group, groupIndex) => [...group.querySelectorAll('.barber-card')].map(card => ({ card, groupIndex })));
+  // Only the phone sequence changes; desktop groups retain their DOM order.
+  const phoneOrder = ['barber-guilherme', 'barber-zidane', 'barber-carlos', 'barber-yuri', 'barber-paulo', 'barber-kauan', 'barber-eduardo'];
+  cards.sort((a, b) => phoneOrder.indexOf(a.card.id) - phoneOrder.indexOf(b.card.id));
   let current = 0;
   let currentCard = 0;
   let busy = false;
   let revision = 0;
   let timer;
+  let gesture = null;
   let heroVisible = false;
   let heroReady = document.getElementById('preloader').style.display === 'none';
   const animate = (element, options) => new Promise(resolve => gsap.to(element, { ...options, onComplete: resolve, onInterrupt: resolve }));
   function schedule() {
     clearTimeout(timer);
-    if (!mobile.matches || reducedMotion.matches || busy || !heroReady || !heroVisible || document.hidden || container.querySelector('.barber-card a:focus')) return;
+    if (!mobile.matches || reducedMotion.matches || busy || gesture || !heroReady || !heroVisible || document.hidden || container.querySelector('.barber-card a:focus')) return;
     timer = setTimeout(() => showGroup(1, true), 5000);
   }
 
@@ -707,6 +716,7 @@ function initBarberCarousel() {
     document.querySelector('.hero-unit-desktop .unit-name').textContent = groups[current].dataset.unit;
   }
   function syncLayout() {
+    gesture = null;
     revision++;
     gsap.killTweensOf(groups);
     gsap.set(groups, { clearProps: 'transform,opacity' });
@@ -764,6 +774,24 @@ function initBarberCarousel() {
   }
   previous.addEventListener('click', () => showGroup(-1));
   next.addEventListener('click', () => showGroup(1));
+  container.addEventListener('pointerdown', event => {
+    if (!mobile.matches || busy || event.pointerType !== 'touch' || !event.isPrimary || event.target.closest('a, button')) return;
+    gesture = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    clearTimeout(timer);
+    container.setPointerCapture(event.pointerId);
+  });
+  container.addEventListener('pointerup', event => {
+    if (!gesture || gesture.id !== event.pointerId) return;
+    const dx = event.clientX - gesture.x;
+    const dy = event.clientY - gesture.y;
+    gesture = null;
+    if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+      showGroup(dx < 0 ? 1 : -1);
+    } else schedule();
+  });
+  const cancelSwipe = () => { gesture = null; schedule(); };
+  container.addEventListener('pointercancel', cancelSwipe);
+  container.addEventListener('lostpointercapture', cancelSwipe);
   [previous, next].forEach(button => button.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();

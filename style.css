@@ -1996,6 +1996,7 @@ a:focus-visible {
 @media (max-width: 600px) {
   #barbers-container {
     /* The lettering's painted bottom is 616 / 2172 of its 94vw width. */
+    touch-action: pan-y pinch-zoom;
     top: calc(142px + 26.66vw);
     bottom: auto;
     padding-inline: 48px;
