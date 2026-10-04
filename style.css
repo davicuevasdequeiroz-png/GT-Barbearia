@@ -12,6 +12,8 @@
 }
 
 :root {
+  /* Preserve the authored light/dark sections instead of automatic recoloring. */
+  color-scheme: only light;
   --orange: #FF6A00;
   --orange-light: #FF8C33;
   --orange-glow: rgba(255, 106, 0, 0.35);

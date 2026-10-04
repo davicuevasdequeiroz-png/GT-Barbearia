@@ -582,7 +582,8 @@ function initStoryShader() {
   const section = document.getElementById('sobre-nos');
   const canvas = section.querySelector('.story-shader');
   const surface = canvas.parentElement;
-  const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
+  // Keep the CSS background visible if a browser forces its own dark palette.
+  const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
   if (!gl) return; // Retain the CSS light field on devices without WebGL.
 
   const compile = (type, source) => {
@@ -635,7 +636,9 @@ function initStoryShader() {
       vec3 color = vec3(1.0) - vec3(shade) - vec3(0.0, warmth * 0.45, warmth);
       // Blend into the neighboring sections without a hard colored boundary.
       float fade = smoothstep(0.0, 0.09, uv.y) * smoothstep(0.0, 0.09, 1.0 - uv.y);
-      gl_FragColor = vec4(mix(vec3(1.0), color, fade), 1.0);
+      float opacity = max(1.0 - min(min(color.r, color.g), color.b), 0.0001);
+      vec3 tint = (color - vec3(1.0 - opacity)) / opacity;
+      gl_FragColor = vec4(tint, opacity * fade);
     }
   `);
   if (!vertex || !fragment) {
