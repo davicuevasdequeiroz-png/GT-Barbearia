@@ -520,8 +520,8 @@ function initHeroAnimations() {
 ───────────────────────────────────────── */
 function initSobreNosAnimations() {
   gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
-    gsap.fromTo('.sobre-img', { scale: 1.07, yPercent: -2 }, {
-      scale: 1.07, yPercent: 2, ease: 'none',
+    gsap.fromTo('.sobre-img', { scale: 1.035, yPercent: 0 }, {
+      scale: 1.035, yPercent: 1, ease: 'none',
       scrollTrigger: { trigger: '.sobre-photo', start: 'top bottom', end: 'bottom top', scrub: 0.8 }
     });
   });
@@ -532,7 +532,7 @@ function initSobreNosAnimations() {
     });
     gsap.from('.sobre-titulo > span', {
       opacity: 0, y: 36, duration: 0.85, stagger: 0.12, ease: 'power3.out',
-      scrollTrigger: { trigger: '.sobre-nos-content', start: 'top 85%', once: true }
+      scrollTrigger: { trigger: '.sobre-heading-block', start: 'top 85%', once: true }
     });
     gsap.from('.sobre-copy, .sobre-signature', {
       opacity: 0, y: 20, duration: 0.7, stagger: 0.12, ease: 'power2.out',
@@ -543,10 +543,164 @@ function initSobreNosAnimations() {
       scrollTrigger: { trigger: '.sobre-photo', start: 'top 85%', once: true }
     });
 
-    gsap.from('.valor-item', {
-      opacity: 0, y: 20, duration: 0.6, stagger: 0.12, ease: 'power2.out',
-      scrollTrigger: { trigger: '.sobre-valores', start: 'top 92%', once: true }
+    const stats = document.querySelector('.sobre-valores');
+    const statsEntrance = gsap.timeline({
+      scrollTrigger: { trigger: stats, start: 'top 96%', once: true }
     });
+    statsEntrance.from(stats, {
+      opacity: 0, y: 8, duration: 0.95, ease: 'power2.out', clearProps: 'transform,opacity'
+    }).from('.sobre-valores .valor-item', {
+      opacity: 0, y: 8, duration: 1.1, stagger: 0.1, ease: 'power2.out', clearProps: 'transform,opacity'
+    }, 0.15);
+
+    // A soft light field moves behind the figures without repainting text or counting in steps.
+    const light = gsap.fromTo(stats.querySelector('.stats-light'),
+      { xPercent: -18, yPercent: -5, rotation: -3 },
+      { xPercent: 18, yPercent: 5, rotation: 3, duration: 8, ease: 'sine.inOut', repeat: -1, yoyo: true, paused: true });
+    const visibleSurfaces = new Set();
+    const updateLight = () => {
+      light.paused(!visibleSurfaces.has(stats) || document.hidden);
+    };
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) visibleSurfaces.add(entry.target);
+        else visibleSurfaces.delete(entry.target);
+      });
+      updateLight();
+    });
+    observer.observe(stats);
+    document.addEventListener('visibilitychange', updateLight);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', updateLight);
+      light.kill();
+    };
+  });
+}
+
+function initStoryShader() {
+  const section = document.getElementById('sobre-nos');
+  const canvas = section.querySelector('.story-shader');
+  const surface = canvas.parentElement;
+  const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
+  if (!gl) return; // Retain the CSS light field on devices without WebGL.
+
+  const compile = (type, source) => {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
+    gl.deleteShader(shader);
+    return null;
+  };
+  const vertex = compile(gl.VERTEX_SHADER, `
+    attribute vec2 position;
+    void main() { gl_Position = vec4(position, 0.0, 1.0); }
+  `);
+  const fragment = compile(gl.FRAGMENT_SHADER, `
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
+      precision highp float;
+    #else
+      precision mediump float;
+    #endif
+    uniform vec2 resolution;
+    uniform float time;
+    float hash(vec2 p) {
+      vec3 q = fract(vec3(p.xyx) * 0.1031);
+      q += dot(q, q.yzx + 19.19);
+      return fract((q.x + q.y) * q.z);
+    }
+    float noise(vec2 p) {
+      vec2 i = floor(p), f = fract(p);
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+        mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0)), u.x), u.y);
+    }
+    float field(vec2 p) {
+      return noise(p) * 0.57 + noise(p * 2.03 + 5.2) * 0.28 + noise(p * 4.01) * 0.15;
+    }
+    void main() {
+      vec2 uv = gl_FragCoord.xy / resolution;
+      // Equal spatial scale on both axes avoids stretched clouds on tall phones.
+      vec2 p = gl_FragCoord.xy / min(resolution.x, resolution.y) * 3.2;
+      float t = time * 0.13;
+      vec2 warp = vec2(field(p * 0.8 + vec2(t, -t * 0.6)),
+                       field(p * 0.8 + vec2(-t * 0.7, t * 0.5) + 9.0));
+      float cloud = field(p + warp * 2.4 + vec2(t * 0.35, -t * 0.25));
+      float ribbon = 1.0 - smoothstep(0.02, 0.19, abs(cloud - 0.51));
+      float mist = smoothstep(0.32, 0.74, cloud);
+      float edge = smoothstep(0.12, 0.5, abs(uv.x - 0.5));
+      float shade = (ribbon * 0.043 + mist * 0.033) * (0.65 + edge * 0.35);
+      float warmth = field(p * 0.6 - t * 0.4) * 0.017;
+      vec3 color = vec3(1.0) - vec3(shade) - vec3(0.0, warmth * 0.45, warmth);
+      // Blend into the neighboring sections without a hard colored boundary.
+      float fade = smoothstep(0.0, 0.09, uv.y) * smoothstep(0.0, 0.09, 1.0 - uv.y);
+      gl_FragColor = vec4(mix(vec3(1.0), color, fade), 1.0);
+    }
+  `);
+  if (!vertex || !fragment) {
+    if (vertex) gl.deleteShader(vertex);
+    if (fragment) gl.deleteShader(fragment);
+    return;
+  }
+  const program = gl.createProgram();
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(fragment);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { gl.deleteProgram(program); return; }
+  gl.useProgram(program);
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const position = gl.getAttribLocation(program, 'position');
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+  const resolution = gl.getUniformLocation(program, 'resolution');
+  const time = gl.getUniformLocation(program, 'time');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let visible = false, lost = false, frame = 0, previous = 0, elapsed = 7;
+  const draw = () => {
+    gl.uniform2f(resolution, canvas.width, canvas.height);
+    gl.uniform1f(time, elapsed);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  };
+  const tick = now => {
+    if (!previous) previous = now;
+    if (now - previous >= 32) {
+      elapsed += Math.min(now - previous, 100) / 1000;
+      previous = now;
+      draw();
+    }
+    frame = requestAnimationFrame(tick);
+  };
+  const sync = () => {
+    cancelAnimationFrame(frame);
+    previous = 0;
+    if (lost || !visible || document.hidden) return;
+    draw();
+    if (!reducedMotion.matches) frame = requestAnimationFrame(tick);
+  };
+  const resize = () => {
+    if (lost) return;
+    const { width, height } = surface.getBoundingClientRect();
+    const scale = Math.min(0.7, 1000 / Math.max(width, height));
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    draw();
+  };
+  resize();
+  surface.classList.add('has-shader');
+  new ResizeObserver(resize).observe(surface);
+  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }).observe(section);
+  document.addEventListener('visibilitychange', sync);
+  reducedMotion.addEventListener('change', sync);
+  canvas.addEventListener('webglcontextlost', () => {
+    lost = true;
+    cancelAnimationFrame(frame);
+    surface.classList.remove('has-shader');
   });
 }
 
@@ -556,6 +710,10 @@ function initSobreAlbum() {
   const cards = [...stage.querySelectorAll('.album-photo')];
   const caption = document.querySelector('.album-date');
   const error = document.querySelector('.album-error');
+  const story = document.getElementById('sobre-story');
+  const panels = [...story.querySelectorAll('.sobre-story-panel')];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const animateStory = options => new Promise(resolve => gsap.to(story, { ...options, onComplete: resolve }));
   let current = 0;
   let busy = false;
   button.addEventListener('click', async () => {
@@ -568,8 +726,10 @@ function initSobreAlbum() {
     const image = cards[next].querySelector('img');
     try {
       await image.decode();
+      if (!reducedMotion.matches) await animateStory({ opacity: 0, y: -6, duration: 0.16, ease: 'power2.in' });
       cards.forEach((card, index) => card.setAttribute('aria-hidden', String(index !== next)));
       stage.dataset.current = String(next);
+      panels.forEach((panel, index) => panel.setAttribute('aria-hidden', String(index !== next)));
       if (next === 1) {
         caption.textContent = 'Atualmente';
       } else {
@@ -578,8 +738,12 @@ function initSobreAlbum() {
         date.textContent = '21 de julho de 2021';
         caption.replaceChildren(date);
       }
-      button.setAttribute('aria-label', next === 1 ? 'Mostrar foto de 21 de julho de 2021' : 'Mostrar foto atual da barbearia');
+      button.setAttribute('aria-label', next === 1 ? 'Mostrar o início da GT: foto e história' : 'Mostrar a barbearia atualmente: foto e história');
       current = next;
+      if (!reducedMotion.matches) {
+        gsap.set(story, { y: 6 });
+        await animateStory({ opacity: 1, y: 0, duration: 0.3, ease: 'power2.out', clearProps: 'transform,opacity' });
+      }
     } catch {
       error.hidden = false;
     } finally {
@@ -819,4 +983,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initPlansAnimations();
   initSobreAlbum();
   initSobreNosAnimations();
+  initStoryShader();
 });

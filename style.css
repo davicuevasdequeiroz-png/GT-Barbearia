@@ -2023,3 +2023,159 @@ a:focus-visible {
   #barber-zidane { --portrait-height: 1.0112; }
   #barber-kauan { --portrait-height: 1.003; }
 }
+/* The founder's story: a photographic spread with the hero's typographic presence. */
+#sobre-nos {
+  --story-orange: #ba4900;
+  min-height: max(700px, 100svh);
+  padding: clamp(48px, 5vw, 80px) 6%;
+  background: #fff;
+  display: block;
+}
+#sobre-nos .sobre-shell { max-width: 1200px; }
+#sobre-nos .sobre-section-label {
+  border-top-color: #d5d2ce; padding: 14px 0 0; margin-bottom: 42px;
+  font-size: 11px; letter-spacing: .16em;
+}
+.sobre-label-detail { color: #6d6862; font-size: 10px; letter-spacing: .12em; }
+#sobre-nos .sobre-nos-container {
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1fr);
+  grid-template-areas: 'photo heading' 'photo story';
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(40px, 6vw, 88px); row-gap: 0; align-items: start;
+}
+.sobre-heading-block { grid-area: heading; padding-top: 22px; }
+#sobre-nos .sobre-titulo {
+  font-size: clamp(62px, 6.7vw, 100px); line-height: .94;
+  letter-spacing: -.015em; margin-bottom: 20px;
+}
+#sobre-nos .sobre-title-accent { color: var(--story-orange); }
+#sobre-nos .sobre-lead {
+  font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45;
+  letter-spacing: -.035em; font-weight: 500; max-width: 380px; margin-bottom: 24px;
+}
+#sobre-nos .sobre-photo { grid-area: photo; width: 100%; max-width: 440px; justify-self: start; padding-right: 14px; }
+.sobre-photo-label { display: flex; justify-content: space-between; margin-bottom: 20px; font-family: var(--font-heading); font-size: 10px; letter-spacing: .16em; color: #68615a; }
+.album-counter { color: var(--story-orange); }
+#sobre-nos .sobre-nos-image { aspect-ratio: 4 / 5; max-height: none; }
+#sobre-nos .album-photo { border-width: 0; box-shadow: 0 7px 24px #17120d18; }
+#sobre-nos .album-photo[aria-hidden='true'] { transform: translate(12px, 4px) rotate(3deg) scale(.98); }
+#sobre-nos .sobre-img { object-position: 50% 15%; }
+#sobre-nos .sobre-img-current { object-position: 50% 58%; }
+#sobre-nos .album-next { width: 54px; height: 54px; right: -24px; background: var(--story-orange); border-width: 3px; box-shadow: none; }
+#sobre-nos .album-next:hover { background: #151515; }
+#sobre-nos .sobre-caption { margin-top: 18px; padding-top: 10px; border-top-width: 1px; border-top-color: var(--story-orange); font-size: 10px; letter-spacing: .08em; }
+#sobre-nos .album-date { font-size: 17px; }
+.album-hint { color: #6c6761; font-size: 11px; line-height: 1.6; margin-top: 12px; }
+.album-hint span { white-space: nowrap; }
+#sobre-nos .sobre-nos-content { grid-area: story; padding: 0; }
+#sobre-nos .sobre-copy { max-width: 510px; }
+#sobre-nos .sobre-texto { font-size: 14px; line-height: 1.8; color: #585550; }
+#sobre-nos .sobre-texto + .sobre-texto { margin-top: 16px; }
+#sobre-nos .sobre-texto strong { color: #191714; font-weight: 500; }
+.sobre-care { margin-top: 20px; padding-left: 15px; border-left: 2px solid var(--orange); font-size: 14px; line-height: 1.6; font-weight: 500; color: #24201b; }
+#sobre-nos .sobre-signature { border: 0; padding: 0; margin-top: 24px; gap: 14px; }
+#sobre-nos .sobre-monogram { font-size: 34px; color: var(--story-orange); }
+.sobre-founder { font-size: 12px; letter-spacing: .07em; }
+.sobre-founder > span { display: inline-block; font-size: 9px; color: #78716a; margin-left: 9px; letter-spacing: .1em; }
+#sobre-nos .sobre-signature-detail { font-size: 11px; color: #68615b; line-height: 1.6; }
+#sobre-nos .sobre-valores { margin-top: 40px; padding: 22px 0; border-color: #dedbd7; gap: 0; }
+#sobre-nos .valor-item { justify-content: flex-start; gap: 18px; padding: 0 28px; }
+#sobre-nos .valor-item:first-child { padding-left: 0; }
+#sobre-nos .valor-item + .valor-item { border-color: #dedbd7; }
+#sobre-nos .valor-numero { font-size: 58px; color: var(--story-orange); }
+#sobre-nos .valor-label { font-size: 11px; letter-spacing: .08em; color: #48423c; }
+.valor-detail { display: block; font-size: 10px; color: #756f68; letter-spacing: .03em; }
+#sobre-nos .sobre-closing { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin: 26px 0 0; text-align: left; }
+.sobre-closing-label { font-family: var(--font-heading); font-size: 9px; letter-spacing: .15em; line-height: 1.6; color: #6d655d; margin-bottom: 10px; }
+.sobre-promise { font-size: clamp(32px, 3vw, 46px); line-height: 1.02; letter-spacing: -.01em; color: #141210; }
+.sobre-promise > span { color: var(--story-orange); }
+.sobre-visit { display: inline-flex; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #b3aaa0; font-family: var(--font-heading); font-size: 12px; letter-spacing: .02em; line-height: 1.4; color: #191714; text-decoration: none; }
+.sobre-visit > span { font-family: var(--font-body); font-size: 20px; color: var(--story-orange); transition: transform .2s ease; }
+.sobre-visit:hover > span { transform: translate(2px, -2px); }
+.sobre-visit:focus-visible { outline: 2px solid var(--story-orange); outline-offset: 5px; }
+@media (max-width: 900px) {
+  #sobre-nos { padding: 48px 6%; }
+  #sobre-nos .sobre-nos-container { column-gap: 32px; }
+  #sobre-nos .sobre-titulo { font-size: clamp(50px, 7.5vw, 68px); }
+  #sobre-nos .sobre-lead { font-size: 18px; }
+  #sobre-nos .sobre-photo { align-self: start; }
+}
+@media (max-width: 600px) {
+  #sobre-nos { min-height: 0; padding: 36px 24px 44px; }
+  #sobre-nos .sobre-section-label { margin-bottom: 28px; font-size: 10px; }
+  .sobre-label-detail { font-size: 8px; max-width: 100px; text-align: right; line-height: 1.6; }
+  #sobre-nos .sobre-nos-container { grid-template-columns: 1fr; grid-template-rows: auto; grid-template-areas: 'heading' 'photo' 'story'; row-gap: 28px; }
+  .sobre-heading-block { padding-top: 0; }
+  #sobre-nos .sobre-titulo { font-size: clamp(56px, 15.5vw, 86px); margin-bottom: 16px; }
+  #sobre-nos .sobre-lead { font-size: 18px; margin-bottom: 0; max-width: 280px; }
+  #sobre-nos .sobre-photo { max-width: 440px; padding: 0 12px 0 0; justify-self: center; }
+  #sobre-nos .sobre-nos-image { aspect-ratio: 1 / 1; }
+  #sobre-nos .sobre-img { object-position: 50% 0; }
+  #sobre-nos .sobre-img-current { object-position: 50% 58%; }
+  #sobre-nos .album-next { right: -21px; width: 48px; height: 48px; }
+  .sobre-photo-label { margin-bottom: 14px; font-size: 9px; }
+  #sobre-nos .sobre-caption { font-size: 9px; gap: 8px; }
+  #sobre-nos .album-date { font-size: 15px; }
+  #sobre-nos .sobre-nos-content { grid-row: auto; }
+  #sobre-nos .sobre-texto { font-size: 14px; line-height: 1.8; }
+  #sobre-nos .sobre-signature { margin-top: 20px; }
+  #sobre-nos .sobre-valores { margin-top: 28px; padding: 20px 0; }
+  #sobre-nos .valor-item { flex-direction: column; align-items: flex-start; gap: 8px; padding-inline: 12px; }
+  #sobre-nos .valor-item:last-child { padding-right: 0; }
+  #sobre-nos .valor-numero { font-size: 46px; }
+  #sobre-nos .valor-label { font-size: 10px; letter-spacing: .01em; }
+  #sobre-nos .sobre-closing { display: block; margin-top: 26px; }
+  .sobre-closing-label { font-size: 8px; }
+  .sobre-promise { font-size: clamp(29px, 8.8vw, 44px); }
+  .sobre-visit { margin-top: 16px; width: 100%; justify-content: space-between; min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) { .sobre-visit > span { transition: none; } }
+/* A quieter heading and one shared light-gray band for the three figures. */
+#sobre-nos .sobre-heading-block { padding-top: 12px; }
+#sobre-nos .sobre-titulo { font-size: clamp(42px, 4.5vw, 68px); line-height: 1.02; margin-bottom: 28px; }
+#sobre-nos .sobre-story-window { display: grid; }
+.sobre-story-panel { grid-area: 1 / 1; min-width: 0; }
+.sobre-story-panel[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+#sobre-nos .sobre-valores {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: #fdfdfd; border: 1px solid #f5f5f5; border-radius: 18px;
+  padding: 26px 12px; margin-top: 36px;
+}
+.stats-light {
+  position: absolute; inset: -70% -25%; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 35% 40%, rgba(255, 166, 91, .075), transparent 45%),
+    radial-gradient(ellipse at 68% 65%, rgba(220, 223, 226, .15), transparent 42%),
+    linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .95) 50%, transparent 70%);
+  transform-origin: center;
+}
+#sobre-nos .sobre-valores .valor-item {
+  position: relative; z-index: 1;
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 16px; gap: 8px; text-align: center;
+}
+#sobre-nos .valor-item + .valor-item { border-left: 1px solid #f0f0f0; }
+#sobre-nos .valor-numero { font-family: var(--font-body); font-weight: 600; font-size: 34px; letter-spacing: -.045em; color: #242424; }
+#sobre-nos .valor-label { font-family: var(--font-body); font-size: 12px; line-height: 1.5; letter-spacing: 0; text-transform: none; color: #646464; }
+@media (max-width: 600px) {
+  #sobre-nos .sobre-heading-block { padding-top: 0; }
+  #sobre-nos .sobre-titulo { font-size: clamp(39px, 11.8vw, 62px); margin-bottom: 0; }
+  #sobre-nos .sobre-valores { padding: 22px 4px; margin-top: 28px; border-radius: 14px; }
+  #sobre-nos .sobre-valores .valor-item { padding-inline: 6px; gap: 8px; }
+  #sobre-nos .valor-numero { font-size: 28px; }
+  #sobre-nos .valor-label { font-size: 10px; }
+}
+/* The procedural light field stays behind the white story section's content. */
+#sobre-nos { isolation: isolate; }
+#sobre-nos .sobre-shell { position: relative; z-index: 1; }
+.story-atmosphere { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.story-shader { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; }
+.story-atmosphere.has-shader .story-shader { opacity: 1; }
+.story-atmosphere.has-shader .story-light { visibility: hidden; }
+.story-light {
+  position: absolute; inset: -12%;
+  background:
+    radial-gradient(ellipse at 12% 30%, rgba(255, 168, 93, .065), transparent 42%),
+    radial-gradient(ellipse at 82% 67%, rgba(207, 213, 221, .09), transparent 45%),
+    radial-gradient(ellipse at 50% 40%, #fff 8%, transparent 58%);
+}

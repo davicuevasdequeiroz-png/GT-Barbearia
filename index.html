@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
 
   <!-- GSAP CDN (free plugins only) -->
@@ -205,16 +205,20 @@
 
   <!-- SOBRE NÓS SECTION -->
   <section id="sobre-nos" aria-labelledby="sobre-heading">
+    <div class="story-atmosphere" aria-hidden="true"><div class="story-light"></div><canvas class="story-shader"></canvas></div>
     <div class="sobre-shell">
       <div class="sobre-section-label">
-        <p><span class="sobre-index">01 /</span> SOBRE NÓS</p>
+        <p><span class="sobre-index">01 /</span> NOSSA HISTÓRIA</p>
       </div>
       <div class="sobre-nos-container">
+        <div class="sobre-heading-block">
+          <h2 class="sobre-titulo" id="sobre-heading"><span>VISUAL RENOVADO.</span><span class="sobre-title-accent">CONFIANÇA<br />LÁ EM CIMA.</span></h2>
+        </div>
         <figure class="sobre-photo">
           <div class="sobre-nos-image album-stage" id="sobre-album" data-current="0" role="group"
             aria-label="Álbum da história da GT Barbearia">
             <div class="album-photo" data-photo="0" aria-hidden="false">
-              <img src="essencial/sobrenos1.png" alt="Barbeiro da GT finalizando um corte em 21 de julho de 2021"
+              <img src="essencial/sobrenos1.png" alt="Guilherme Teixeira finalizando um corte em 21 de julho de 2021"
                 class="sobre-img" loading="lazy" />
             </div>
             <div class="album-photo" data-photo="1" aria-hidden="true">
@@ -222,8 +226,8 @@
                 alt="Interior atual da GT Barbearia, com a equipe atendendo os clientes"
                 class="sobre-img sobre-img-current" loading="lazy" />
             </div>
-            <button class="album-next" type="button" aria-controls="sobre-album"
-              aria-label="Mostrar foto atual da barbearia" title="Ver a próxima foto">
+            <button class="album-next" type="button" aria-controls="sobre-album sobre-story"
+              aria-label="Mostrar a barbearia atualmente: foto e história" title="Ver a próxima foto e história">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                 stroke-linejoin="round" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />
@@ -235,26 +239,36 @@
           <p class="album-error" role="status" hidden>Não foi possível carregar a foto. Tente novamente.</p>
         </figure>
         <div class="sobre-nos-content">
-          <h2 class="sobre-titulo" id="sobre-heading"><span>NOSSA</span><span
-              class="sobre-title-accent">HISTÓRIA.</span></h2>
           <div class="sobre-copy">
-            <p class="sobre-lead">Mais de 6 anos de dedicação ao que fazemos.</p>
-            <p class="sobre-texto">A GT Barbearia se consolidou como referência de qualidade e estilo em Uberlândia.
-              Nosso compromisso é oferecer o melhor atendimento e fazer de cada visita uma experiência memorável.</p>
+            <div class="sobre-story-window" id="sobre-story" aria-live="polite" aria-atomic="true">
+              <div class="sobre-story-panel" data-story="0" aria-hidden="false">
+                <p class="sobre-texto">Aos <strong>14 anos</strong>, Guilherme Teixeira começou a aprender o ofício.
+                  Aos <strong>16</strong>, abriu a própria barbearia na garagem de casa. O nome GT Barbearia 16
+                  carrega esse começo: suas iniciais e a idade em que tudo ganhou forma.</p>
+                <p class="sobre-texto">Com a casa cheia, vieram Carlim, depois Zidane. A equipe cresceu junto
+                  com a confiança dos clientes, construindo a história da GT a cada corte.</p>
+              </div>
+              <div class="sobre-story-panel" data-story="1" aria-hidden="true">
+                <p class="sobre-texto"><strong>Sete anos depois</strong>, a GT recebe você em <strong>duas unidades</strong>,
+                  com espaços amplos e aconchegantes e uma equipe dedicada a cuidar do seu visual.</p>
+                <p class="sobre-texto">Para Guilherme, o cuidado vai além do corte. A vontade é que cada cliente
+                  saia com a imagem renovada, a autoestima lá em cima e mais confiança para o dia a dia.</p>
+              </div>
+            </div>
+            <p class="sobre-care">O espaço mudou. O cuidado com quem corta conosco continua.</p>
           </div>
-          <div class="sobre-signature"><span class="sobre-monogram" aria-hidden="true">GT</span><span>GUILHERME
-              TEIXEIRA<br /><span class="sobre-signature-detail">"Pois tudo posso naquele que me
-                fortalece"</span></span></div>
+          <div class="sobre-signature"><span class="sobre-monogram" aria-hidden="true">GT</span><div>
+              <p class="sobre-founder">GUILHERME TEIXEIRA <span>FUNDADOR</span></p>
+              <p class="sobre-signature-detail">“Pois tudo posso naquele que me fortalece”</p></div></div>
         </div>
       </div>
       <div class="sobre-valores" aria-label="A GT em números">
-        <div class="valor-item"><span class="valor-numero">6<span class="valor-plus">+</span></span><span
-            class="valor-label">Anos de<br />tradição</span></div>
-        <div class="valor-item"><span class="valor-numero">7</span><span class="valor-label">Barbeiros</span></div>
-        <div class="valor-item"><span class="valor-numero"><span class="valor-plus">+</span>1K</span><span
-            class="valor-label">Clientes<br />satisfeitos</span></div>
+        <div class="stats-light" aria-hidden="true"></div>
+        <div class="valor-item"><span class="valor-numero">7</span><span class="valor-label">Anos de história</span></div>
+        <div class="valor-item"><span class="valor-numero">2</span><span class="valor-label">Unidades</span></div>
+        <div class="valor-item"><span class="valor-numero">9</span><span class="valor-label">Colaboradores</span></div>
       </div>
-      <p class="sobre-closing">PRONTOS PARA TE ATENDER NAS DUAS UNIDADES!</p>
+
     </div>
   </section>
 
@@ -263,18 +277,18 @@
       <div class="plans-section-label"><span>02 /</span> CLUB GT</div>
       <h2 class="plans-title" id="planos-heading">PLANOS DE <span>ASSINATURA.</span></h2>
       <div class="plans-grid">
-        <article class="plan-card" aria-labelledby="plan-flesh">
+        <article class="plan-card" aria-labelledby="plan-fresh">
           <div class="plan-card-heading">
-            <h3 id="plan-flesh">FLESH<span>CLUB GT</span></h3>
+            <h3 id="plan-fresh">FRESH<span>CLUB GT</span></h3>
             <span class="plan-index" aria-hidden="true">01</span>
           </div>
           <p class="plan-benefit">Corte ilimitado</p>
           <p class="plan-price"><span class="plan-currency">R$</span> <strong>74,99</strong><span
               class="plan-period">/mês</span></p>
           <a class="plan-button"
-            href="https://wa.me/5534997316923?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Flesh%20Club%20GT%2C%20por%20R%24%2074%2C99%2Fm%C3%AAs."
-            target="_blank" rel="noopener noreferrer" aria-label="Consultar Flesh Club GT pelo WhatsApp">
-            QUERO O FLESH <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            href="https://wa.me/5534997316923?text=Ol%C3%A1!%20Tenho%20interesse%20no%20plano%20Fresh%20Club%20GT%2C%20por%20R%24%2074%2C99%2Fm%C3%AAs."
+            target="_blank" rel="noopener noreferrer" aria-label="Consultar Fresh Club GT pelo WhatsApp">
+            QUERO O FRESH <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
