@@ -3,14 +3,8 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Fixed brand palette: do not automatically darken the page. -->
   <meta name="color-scheme" content="only light" />
-  <script>
-    // Samsung's forced night mode can ignore color-scheme. Scope its fallback
-    // before first paint so Chrome and the other browsers keep their own styles.
-    if (/SamsungBrowser\//i.test(navigator.userAgent)) {
-      document.documentElement.classList.add('samsung-internet');
-    }
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GT Barbearia | Qualidade & Estilo</title>
   <meta name="description"
