@@ -1187,7 +1187,7 @@ a:focus-visible {
   z-index: -1;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(220px circle at var(--plan-x) var(--plan-y), rgba(255, 106, 0, 0.12), transparent 85%);
+  background: radial-gradient(250px circle at var(--plan-x) var(--plan-y), rgba(255, 106, 0, 0.20), transparent 85%);
   transition: opacity 220ms ease;
 }
 
@@ -1223,13 +1223,6 @@ a:focus-visible {
   font-weight: 500;
   letter-spacing: 0.24em;
   color: var(--orange-light);
-}
-
-.plan-index {
-  font-family: var(--font-heading);
-  font-size: 14px;
-  color: #92887f;
-  padding-top: 6px;
 }
 
 .plan-benefit {
