@@ -31,6 +31,21 @@ html {
   overflow-x: hidden;
 }
 
+/* Keep the gutter width fixed so revealing the thumb never shifts the page. */
+@media (forced-colors: none) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: transparent #0a0a0a;
+  }
+  html.scrollbar-active { scrollbar-color: #55483e #0a0a0a; }
+  html::-webkit-scrollbar { width: 8px; }
+  html::-webkit-scrollbar-track { background: #0a0a0a; }
+  html::-webkit-scrollbar-thumb { background: transparent; border-radius: 8px; }
+  html.scrollbar-active::-webkit-scrollbar-thumb { background: #55483e; }
+  html::-webkit-scrollbar-thumb:hover { background: #79604c; }
+  html::-webkit-scrollbar-button { display: none; }
+}
+
 body {
   background: var(--black);
   color: var(--white);

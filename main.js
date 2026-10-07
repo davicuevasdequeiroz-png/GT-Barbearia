@@ -1055,7 +1055,38 @@ function initBarberCarousel() {
 
 }
 
+function initScrollbarVisibility() {
+  const root = document.documentElement;
+  let timer;
+  let nearEdge = false;
+  const reveal = () => {
+    root.classList.add('scrollbar-active');
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (!nearEdge) root.classList.remove('scrollbar-active');
+    }, 1000);
+  };
+  window.addEventListener('scroll', reveal, { passive: true });
+  window.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch') return;
+    const atEdge = event.clientX >= root.clientWidth - 16;
+    if (atEdge === nearEdge) return;
+    nearEdge = atEdge;
+    reveal();
+  }, { passive: true });
+  document.addEventListener('pointerleave', () => {
+    nearEdge = false;
+    reveal();
+  });
+  window.addEventListener('blur', () => {
+    nearEdge = false;
+    clearTimeout(timer);
+    root.classList.remove('scrollbar-active');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  initScrollbarVisibility();
   initBarberCarousel();
   initTeamSizing();
   initAnchorNavigation();
