@@ -1246,6 +1246,18 @@ a:focus-visible {
   align-items: flex-start;
 }
 
+/* The two surface layers live below the unchanged, selectable card content. */
+.plan-reveal {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+.plan-card.has-plan-reveal::before { display: none; }
+.plan-card.has-plan-reveal:hover { transform: none; }
+
 .plan-card h3 {
   font-family: var(--font-display);
   font-size: clamp(40px, 3.5vw, 54px);
@@ -1629,6 +1641,26 @@ a:focus-visible {
   line-height: 1;
   color: inherit;
   text-decoration: none;
+  flex-shrink: 0;
+}
+
+.footer-identity {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.footer-credit {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #aaa;
+  transform: translateY(4px);
+}
+
+.footer-credit span {
+  display: inline-block;
+  color: #ededed;
 }
 
 .footer-brand span {
@@ -1708,6 +1740,11 @@ a:focus-visible {
   .footer-bottom {
     flex-wrap: wrap;
     gap: 10px 24px;
+  }
+
+  .footer-identity {
+    width: 100%;
+    gap: 14px;
   }
 
   .footer-nav {

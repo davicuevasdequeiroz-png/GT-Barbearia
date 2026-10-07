@@ -766,18 +766,7 @@ function initPlansAnimations() {
     });
   });
   gsap.matchMedia().add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
-    const cleanups = [];
-    document.querySelectorAll('.plan-card').forEach(card => {
-      const move = event => {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--plan-x', (event.clientX - rect.left) + 'px');
-        card.style.setProperty('--plan-y', (event.clientY - rect.top) + 'px');
-      };
-      const reset = () => { card.style.removeProperty('--plan-x'); card.style.removeProperty('--plan-y'); };
-      card.addEventListener('pointermove', move, { passive: true });
-      card.addEventListener('pointerleave', reset);
-      cleanups.push(() => { card.removeEventListener('pointermove', move); card.removeEventListener('pointerleave', reset); reset(); });
-    });
+    const cleanups = [...document.querySelectorAll('.plan-card')].map(card => createPlanReveal(card));
     return () => cleanups.forEach(cleanup => cleanup());
   });
 }
