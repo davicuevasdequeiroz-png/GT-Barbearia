@@ -38,6 +38,27 @@ body {
   overflow-x: hidden;
 }
 
+/* Keep native layout stable while Lenis controls desktop wheel scrolling. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis-smooth {
+  scroll-behavior: auto !important;
+  overflow-anchor: none;
+  overscroll-behavior-y: none;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Let wheel events reach the page while passing over a map in motion. */
+.lenis.lenis-scrolling .location-map iframe {
+  pointer-events: none;
+}
+
 /* ═══════════════════════════════════════
    PRELOADER
 ═══════════════════════════════════════ */

@@ -397,8 +397,7 @@ function initLenis() {
   // Touch scrolling stays entirely native; desktop smoothing has a clean teardown.
   gsap.matchMedia().add(DESKTOP_MOTION_QUERY, () => {
     const lenis = new Lenis({
-      duration: 0.6,
-      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.075,
       smoothWheel: true,
       syncTouch: false,
     });
@@ -787,7 +786,8 @@ function initFooterAnimations() {
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
     document.querySelectorAll('.locations-title, .location-card, .footer-contact-intro, .footer-contact-links').forEach(element => {
       gsap.from(element, {
-        opacity: 0, y: 20, duration: 0.7, ease: 'power3.out', clearProps: 'transform,opacity',
+        // Fade in without moving map frames or changing the bottom scroll extent.
+        opacity: 0, duration: 0.7, ease: 'power3.out', clearProps: 'opacity',
         scrollTrigger: { trigger: element, start: 'top 92%', once: true }
       });
     });
@@ -804,6 +804,7 @@ function initAnchorNavigation() {
   };
   window.addEventListener('wheel', cancel, { passive: true });
   window.addEventListener('touchstart', cancel, { passive: true });
+  window.addEventListener('pointerdown', cancel, { passive: true });
   window.addEventListener('keydown', event => {
     if (['Escape', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) cancel();
   });
