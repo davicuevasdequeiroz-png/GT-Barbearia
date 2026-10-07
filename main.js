@@ -894,8 +894,8 @@ function initTeamSizing() {
     const ceiling = unit.getBoundingClientRect().bottom - heroRect.top + 12;
     let bottom = 8;
     let scale = Math.min((hero.clientHeight - bottom - ceiling) / height, container.clientWidth / group.offsetWidth);
-    // Reserve a footer row only when the scaled names would collide with a link.
-    const links = [...actions.querySelectorAll('a')].map(link => link.getBoundingClientRect());
+    // Include the location above the booking link when reserving footer space.
+    const links = [...actions.children].map(element => element.getBoundingClientRect());
     const collides = cards.some(card => {
       const info = card.querySelector('.barber-info');
       const left = heroRect.left + container.clientWidth / 2 + (card.offsetLeft + info.offsetLeft - group.offsetWidth / 2) * scale;

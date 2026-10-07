@@ -817,15 +817,17 @@ a:focus-visible {
   .hero-actions {
     bottom: 18px;
     inset-inline: 28px;
-    align-items: center;
-  }
-
-  .hero-location {
-    display: none;
+    align-items: flex-end;
   }
 }
 
 @media (max-width: 600px) {
+  .hero-location {
+    margin-bottom: 8px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
   .hero-actions {
     inset-inline: 16px;
     bottom: 12px;
