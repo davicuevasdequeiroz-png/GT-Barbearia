@@ -1985,6 +1985,24 @@ a:focus-visible {
   #barber-zidane { --portrait-height: 1.0112; }
   #barber-kauan { --portrait-height: 1.003; }
 }
+/* Resize each desktop team as one composition, independently of GSAP transforms. */
+.barber-composition { display: contents; }
+@media (min-width: 901px) {
+  #hero { height: 100svh; min-height: 540px; }
+  #barbers-container {
+    bottom: var(--team-bottom, 84px);
+  }
+  #barbers-container .barber-composition {
+    display: flex;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    align-items: flex-end;
+    scale: var(--team-scale, 1);
+    transform-origin: center bottom;
+  }
+}
+
 /* The founder's story: a photographic spread with the hero's typographic presence. */
 #sobre-nos {
   --story-orange: #ba4900;

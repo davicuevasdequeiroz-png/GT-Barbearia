@@ -841,6 +841,85 @@ function initAnchorNavigation() {
   });
 }
 
+function initTeamSizing() {
+  const hero = document.getElementById('hero');
+  const container = document.getElementById('barbers-container');
+  const unit = hero.querySelector('.hero-unit-desktop');
+  const actions = hero.querySelector('.hero-actions');
+  const desktop = window.matchMedia('(min-width: 901px)');
+  const composition = document.createElement('div');
+  composition.className = 'barber-composition';
+  container.prepend(composition);
+  const groups = [...container.querySelectorAll('.barber-group')];
+  groups.forEach(group => composition.append(group));
+  const trims = new WeakMap();
+  function portraitTop(image) {
+    if (!image.naturalWidth) return 0;
+    if (!trims.has(image)) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 160;
+      canvas.height = Math.round(160 * image.naturalHeight / image.naturalWidth);
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      try {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        let row = 0;
+        while (row < canvas.height && !pixels.subarray(row * 640, (row + 1) * 640).some((value, index) => index % 4 === 3 && value > 32)) row++;
+        trims.set(image, row / canvas.height);
+      } catch { trims.set(image, 0); }
+    }
+    const fit = getComputedStyle(image).objectFit;
+    const ratio = (fit === 'contain' ? Math.min : Math.max)(image.offsetWidth / image.naturalWidth, image.offsetHeight / image.naturalHeight);
+    const paintedHeight = image.naturalHeight * ratio;
+    return trims.get(image) * paintedHeight + (fit === 'contain' ? image.offsetHeight - paintedHeight : 0);
+  }
+  let frame = 0;
+
+  function resize() {
+    frame = 0;
+    if (!desktop.matches) {
+      container.style.removeProperty('--team-bottom');
+      container.style.removeProperty('--team-scale');
+      return;
+    }
+    const group = container.querySelector('.barber-group:not([hidden])');
+    if (!group) return;
+    const cards = [...group.querySelectorAll('.barber-card')];
+    const top = Math.min(...cards.map(card => {
+      const image = card.querySelector('.barber-img');
+      return card.offsetTop + image.parentElement.offsetTop + image.offsetTop + portraitTop(image);
+    }));
+    const height = group.offsetHeight - top;
+    const heroRect = hero.getBoundingClientRect();
+    const ceiling = unit.getBoundingClientRect().bottom - heroRect.top + 12;
+    let bottom = 8;
+    let scale = Math.min((hero.clientHeight - bottom - ceiling) / height, container.clientWidth / group.offsetWidth);
+    // Reserve a footer row only when the scaled names would collide with a link.
+    const links = [...actions.querySelectorAll('a')].map(link => link.getBoundingClientRect());
+    const collides = cards.some(card => {
+      const info = card.querySelector('.barber-info');
+      const left = heroRect.left + container.clientWidth / 2 + (card.offsetLeft + info.offsetLeft - group.offsetWidth / 2) * scale;
+      const right = left + info.offsetWidth * scale;
+      return links.some(link => left < link.right + 8 && right > link.left - 8);
+    });
+    if (collides) {
+      bottom = heroRect.bottom - Math.min(...links.map(link => link.top)) + 8;
+      scale = Math.min(scale, (hero.clientHeight - bottom - ceiling) / height);
+    }
+    container.style.setProperty('--team-bottom', bottom + 'px');
+    container.style.setProperty('--team-scale', scale.toFixed(5));
+  }
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(resize); };
+  const observer = new ResizeObserver(schedule);
+  [hero, unit, actions, ...container.querySelectorAll('.barber-group')].forEach(element => observer.observe(element));
+  container.querySelectorAll('.barber-img').forEach(image => {
+    image.addEventListener('load', schedule, { once: true });
+  });
+  desktop.addEventListener('change', schedule);
+  document.fonts.ready.then(schedule);
+  schedule();
+}
+
 function initBarberCarousel() {
   const container = document.getElementById('barbers-container');
   const groups = [...container.querySelectorAll('.barber-group')];
@@ -978,6 +1057,7 @@ function initBarberCarousel() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initBarberCarousel();
+  initTeamSizing();
   initAnchorNavigation();
   initFooterAnimations();
   initPlansAnimations();
