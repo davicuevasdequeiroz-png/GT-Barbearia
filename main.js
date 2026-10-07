@@ -526,10 +526,6 @@ function initSobreNosAnimations() {
     });
   });
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
-    gsap.from('.sobre-section-label', {
-      opacity: 0, y: 16, duration: 0.65, ease: 'power2.out',
-      scrollTrigger: { trigger: '#sobre-nos', start: 'top 82%', once: true }
-    });
     gsap.from('.sobre-titulo > span', {
       opacity: 0, y: 36, duration: 0.85, stagger: 0.12, ease: 'power3.out',
       scrollTrigger: { trigger: '.sobre-heading-block', start: 'top 85%', once: true }
@@ -759,7 +755,7 @@ function initSobreAlbum() {
 
 function initPlansAnimations() {
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
-    gsap.from('.plans-section-label, .plans-title', {
+    gsap.from('.plans-title', {
       opacity: 0, y: 20, duration: 0.7, stagger: 0.1, ease: 'power3.out',
       scrollTrigger: { trigger: '#planos', start: 'top 82%', once: true }
     });
@@ -789,7 +785,7 @@ function initPlansAnimations() {
 
 function initFooterAnimations() {
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
-    document.querySelectorAll('.footer-section-label, .locations-title, .location-card, .footer-contact-intro, .footer-contact-links').forEach(element => {
+    document.querySelectorAll('.locations-title, .location-card, .footer-contact-intro, .footer-contact-links').forEach(element => {
       gsap.from(element, {
         opacity: 0, y: 20, duration: 0.7, ease: 'power3.out', clearProps: 'transform,opacity',
         scrollTrigger: { trigger: element, start: 'top 92%', once: true }
