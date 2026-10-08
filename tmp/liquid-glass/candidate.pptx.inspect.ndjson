@@ -1,0 +1,25 @@
+{"kind":"deck","id":"pr/33htyj","name":"Deck"}
+{"kind":"layout","id":"ly/epkj258n","editable":false,"name":"Master","type":"master"}
+{"kind":"layout","id":"ly/54zih43u","editable":false,"name":"Title Slide","type":"title","placeholders":[{"name":"title","type":"title"},{"name":"subtitle","type":"subtitle"}]}
+{"kind":"layout","id":"ly/7ipc7qlo","editable":false,"name":"Section Header","type":"sectionHeader","placeholders":[{"name":"title","type":"title"}]}
+{"kind":"layout","id":"ly/8nupoby9","editable":false,"name":"Title and Body","type":"tx","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/feporm9o","editable":false,"name":"Title and Two Column","type":"twoColTx","placeholders":[{"name":"title","type":"title"},{"name":"Left column","type":"body"},{"name":"Right column","type":"body"}]}
+{"kind":"layout","id":"ly/at8vat07","editable":false,"name":"Title and One Column","type":"tx","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/1s3yxs3y","editable":false,"name":"Blank","type":"blank"}
+{"kind":"slide","id":"sl/npwd12","slideIndex":0,"layout":{"id":"ly/1s3yxs3y","name":"Blank"},"title":"Liquid Glass","textShapes":1,"backgroundColor":"rgba(255,255,255,1)"}
+{"kind":"shape","id":"sh/w7qdkjad","slideIndex":0,"position":{"left":276,"top":312,"width":1048,"height":282},"name":"Sombra suave 6","geometry":"roundRect","fillColor":"rgba(38,56,75,0.0216)","lineWidth":0}
+{"kind":"shape","id":"sh/b6xcre9s","slideIndex":0,"position":{"left":280,"top":314,"width":1040,"height":277},"name":"Sombra suave 5","geometry":"roundRect","fillColor":"rgba(38,56,75,0.02)","lineWidth":0}
+{"kind":"shape","id":"sh/a5ovi9sn","slideIndex":0,"position":{"left":284,"top":316,"width":1032,"height":272},"name":"Sombra suave 4","geometry":"roundRect","fillColor":"rgba(38,56,75,0.0184)","lineWidth":0}
+{"kind":"shape","id":"sh/94fupor2","slideIndex":0,"position":{"left":288,"top":318,"width":1024,"height":267},"name":"Sombra suave 3","geometry":"roundRect","fillColor":"rgba(38,56,75,0.0168)","lineWidth":0}
+{"kind":"shape","id":"sh/o36dgjah","slideIndex":0,"position":{"left":292,"top":320,"width":1016,"height":262},"name":"Sombra suave 2","geometry":"roundRect","fillColor":"rgba(38,56,75,0.0152)","lineWidth":0}
+{"kind":"shape","id":"sh/n2xcne9w","slideIndex":0,"position":{"left":296,"top":322,"width":1008,"height":257},"name":"Sombra suave 1","geometry":"roundRect","fillColor":"rgba(38,56,75,0.0136)","lineWidth":0}
+{"kind":"shape","id":"sh/m1ove9sb","slideIndex":0,"position":{"left":300,"top":300,"width":1000,"height":280},"name":"Contorno externo do vidro","geometry":"roundRect","lineWidth":0}
+{"kind":"shape","id":"sh/t0je18r6","slideIndex":0,"position":{"left":302,"top":302,"width":996,"height":276},"name":"Corpo translúcido","geometry":"roundRect","lineColor":"rgba(255,255,255,0.85)","lineWidth":1}
+{"kind":"shape","id":"sh/8zads3ql","slideIndex":0,"position":{"left":308,"top":308,"width":984,"height":264},"name":"Profundidade interior","geometry":"roundRect","lineWidth":0}
+{"kind":"shape","id":"sh/at0nmxsz","slideIndex":0,"position":{"left":708,"top":316,"width":244,"height":248},"name":"Reflexo diagonal largo","geometry":"custom","lineWidth":0}
+{"kind":"shape","id":"sh/vu94f29k","slideIndex":0,"position":{"left":932,"top":316,"width":72,"height":248},"name":"Reflexo diagonal fino","geometry":"custom","lineWidth":0}
+{"kind":"shape","id":"sh/wv25o7ap","slideIndex":0,"position":{"left":302,"top":302,"width":590,"height":180},"name":"Brilho superior esquerdo","geometry":"custom","lineColor":"rgba(255,255,255,0.98)","lineWidth":3.2}
+{"kind":"shape","id":"sh/xwbmhcra","slideIndex":0,"position":{"left":721,"top":424,"width":577,"height":154},"name":"Brilho inferior direito","geometry":"custom","lineColor":"rgba(255,255,255,0.95)","lineWidth":3.2}
+{"kind":"shape","id":"sh/m50nixsn","slideIndex":0,"position":{"left":432,"top":575,"width":733,"height":2},"name":"Refracao inferior","geometry":"custom","lineColor":"rgba(179,188,199,0.4)","lineWidth":0.8}
+{"kind":"textbox","id":"sh/n694b298","slideIndex":0,"position":{"left":460,"top":394,"width":680,"height":92},"name":"Texto editável","text":"Liquid Glass","geometry":"rect","lineWidth":0,"style":{"fontSize":72,"typeface":"Arial","color":"#333C46","alignment":"center"}}
+{"kind":"notes","id":"nt/npwd12","slideIndex":0,"text":""}

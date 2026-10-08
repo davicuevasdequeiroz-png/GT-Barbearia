@@ -1006,11 +1006,19 @@ function initBarberCarousel() {
   }
   previous.addEventListener('click', () => showGroup(-1));
   next.addEventListener('click', () => showGroup(1));
+  let suppressPhotoClickUntil = 0;
+  container.addEventListener('click', event => {
+    if (event.target.closest('.barber-booking') && performance.now() < suppressPhotoClickUntil) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
   container.addEventListener('pointerdown', event => {
-    if (!mobile.matches || busy || event.pointerType !== 'touch' || !event.isPrimary || event.target.closest('a, button')) return;
+    if (!mobile.matches || busy || event.pointerType !== 'touch' || !event.isPrimary || event.target.closest('a:not(.barber-booking), button')) return;
     gesture = { id: event.pointerId, x: event.clientX, y: event.clientY };
     clearTimeout(timer);
-    container.setPointerCapture(event.pointerId);
+    // Keep taps targeted at the link; touch pointers have implicit capture.
+    suppressPhotoClickUntil = 0;
   });
   container.addEventListener('pointerup', event => {
     if (!gesture || gesture.id !== event.pointerId) return;
@@ -1018,6 +1026,7 @@ function initBarberCarousel() {
     const dy = event.clientY - gesture.y;
     gesture = null;
     if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+      suppressPhotoClickUntil = performance.now() + 600;
       showGroup(dx < 0 ? 1 : -1);
     } else schedule();
   });

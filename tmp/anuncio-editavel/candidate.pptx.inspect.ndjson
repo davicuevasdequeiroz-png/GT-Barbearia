@@ -1,0 +1,21 @@
+{"kind":"deck","id":"pr/iw6c6l","name":"Deck"}
+{"kind":"layout","id":"ly/y943y9sr","editable":false,"name":"Master","type":"master"}
+{"kind":"layout","id":"ly/z65sj2p0","editable":false,"name":"Title Slide","type":"title","placeholders":[{"name":"title","type":"title"},{"name":"subtitle","type":"subtitle"}]}
+{"kind":"layout","id":"ly/ru94zmxk","editable":false,"name":"Section Header","type":"sectionHeader","placeholders":[{"name":"title","type":"title"}]}
+{"kind":"layout","id":"ly/fm9cn2ps","editable":false,"name":"Title and Body","type":"tx","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/m94rexgz","editable":false,"name":"Title and Two Column","type":"twoColTx","placeholders":[{"name":"title","type":"title"},{"name":"Left column","type":"body"},{"name":"Right column","type":"body"}]}
+{"kind":"layout","id":"ly/8zex8zmd","editable":false,"name":"Title and One Column","type":"tx","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/e5cry9gj","editable":false,"name":"Blank","type":"blank"}
+{"kind":"slide","id":"sl/sg1d26","slideIndex":0,"layout":{"id":"ly/e5cry9gj","name":"Blank"},"title":"NOSSO SITE","textShapes":2,"backgroundColor":"rgba(8,8,8,1)"}
+{"kind":"shape","id":"sh/z2l8zq58","slideIndex":0,"position":{"left":0,"top":0,"width":1489,"height":1900},"name":"Fundo preto","geometry":"rect","fillColor":"#080808","lineWidth":0}
+{"kind":"shape","id":"sh/03u98vmt","slideIndex":0,"position":{"left":40,"top":50,"width":118,"height":118},"name":"Logo GT vetorial","geometry":"custom","fillColor":"#FF6A00","lineWidth":0}
+{"kind":"textbox","id":"sh/l43q10ne","slideIndex":0,"position":{"left":185,"top":220,"width":1119,"height":290},"name":"Titulo NOSSO SITE","text":"NOSSO SITE","geometry":"rect","lineWidth":0,"style":{"fontSize":3.13,"typeface":"Impact","color":"#FF6A00","alignment":"center"}}
+{"kind":"shape","id":"sh/qxsr214r","slideIndex":0,"position":{"left":51,"top":551,"width":1387,"height":685},"name":"Moldura do site","geometry":"roundRect","fillColor":"#0C0C0C","lineColor":"#555555","lineWidth":1.4}
+{"kind":"shape","id":"sh/czu94bmx","slideIndex":0,"position":{"left":199,"top":1403,"width":1091,"height":200},"name":"Sombra do card","geometry":"roundRect","fillColor":"rgba(0,0,0,0.22)","lineWidth":0}
+{"kind":"shape","id":"sh/d03qxgn2","slideIndex":0,"position":{"left":206,"top":1390,"width":1077,"height":198},"name":"Borda de vidro","geometry":"roundRect","lineWidth":0}
+{"kind":"shape","id":"sh/atwre54v","slideIndex":0,"position":{"left":208,"top":1392,"width":1073,"height":194},"name":"Superficie de vidro","geometry":"roundRect","lineWidth":0}
+{"kind":"shape","id":"sh/vu5s7a5g","slideIndex":0,"position":{"left":233,"top":1394,"width":1023,"height":57},"name":"Brilho superior suave","geometry":"roundRect","lineWidth":0}
+{"kind":"shape","id":"sh/zip4nm98","slideIndex":0,"position":{"left":238,"top":1525,"width":1013,"height":57},"name":"Reflexo inferior suave","geometry":"roundRect","lineWidth":0}
+{"kind":"textbox","id":"sh/ehg3ehs3","slideIndex":0,"position":{"left":255,"top":1440,"width":979,"height":100},"name":"URL editavel","text":"www.gtbarbearia16.com.br","geometry":"rect","lineWidth":0,"style":{"fontSize":57,"typeface":"Arial","color":"#F7F7F7","bold":true,"alignment":"center"}}
+{"kind":"image","id":"im/uh0z6tgz","slideIndex":0,"position":{"left":53,"top":553,"width":1383,"height":681},"fit":"contain","name":"","alt":"Print original do site GT Barbearia preservado, sem modificar rostos ou textos"}
+{"kind":"notes","id":"nt/sg1d26","slideIndex":0,"text":""}

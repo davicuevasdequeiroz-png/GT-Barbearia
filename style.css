@@ -2208,3 +2208,8 @@ a:focus-visible {
     radial-gradient(ellipse at 82% 67%, rgba(207, 213, 221, .09), transparent 45%),
     radial-gradient(ellipse at 50% 40%, #fff 8%, transparent 58%);
 }
+
+/* Photo links retain the existing animation wrapper and keyboard focus. */
+.barber-booking { text-decoration: none; cursor: pointer; }
+.barber-booking:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+.barber-booking .barber-img { -webkit-user-drag: none; user-select: none; }

@@ -1,0 +1,18 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/npwd12","index":0,"layout":{"id":"ly/1s3yxs3y","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1600,"height":900}},
+"elements":[
+{"id":"sh/w7qdkjad","kind":"shape","name":"Sombra suave 6","position":{"left":276,"top":312,"width":1048,"height":282},"geometry":"roundRect","fillColor":"rgba(38,56,75,0.0216)","lineWidth":0},
+{"id":"sh/b6xcre9s","kind":"shape","name":"Sombra suave 5","position":{"left":280,"top":314,"width":1040,"height":277},"geometry":"roundRect","fillColor":"rgba(38,56,75,0.02)","lineWidth":0},
+{"id":"sh/a5ovi9sn","kind":"shape","name":"Sombra suave 4","position":{"left":284,"top":316,"width":1032,"height":272},"geometry":"roundRect","fillColor":"rgba(38,56,75,0.0184)","lineWidth":0},
+{"id":"sh/94fupor2","kind":"shape","name":"Sombra suave 3","position":{"left":288,"top":318,"width":1024,"height":267},"geometry":"roundRect","fillColor":"rgba(38,56,75,0.0168)","lineWidth":0},
+{"id":"sh/o36dgjah","kind":"shape","name":"Sombra suave 2","position":{"left":292,"top":320,"width":1016,"height":262},"geometry":"roundRect","fillColor":"rgba(38,56,75,0.0152)","lineWidth":0},
+{"id":"sh/n2xcne9w","kind":"shape","name":"Sombra suave 1","position":{"left":296,"top":322,"width":1008,"height":257},"geometry":"roundRect","fillColor":"rgba(38,56,75,0.0136)","lineWidth":0},
+{"id":"sh/m1ove9sb","kind":"shape","name":"Contorno externo do vidro","position":{"left":300,"top":300,"width":1000,"height":280},"geometry":"roundRect","lineWidth":0},
+{"id":"sh/t0je18r6","kind":"shape","name":"Corpo translúcido","position":{"left":302,"top":302,"width":996,"height":276},"geometry":"roundRect","lineColor":"rgba(255,255,255,0.85)","lineWidth":1},
+{"id":"sh/8zads3ql","kind":"shape","name":"Profundidade interior","position":{"left":308,"top":308,"width":984,"height":264},"geometry":"roundRect","lineWidth":0},
+{"id":"sh/at0nmxsz","kind":"shape","name":"Reflexo diagonal largo","position":{"left":708,"top":316,"width":244,"height":248},"geometry":"custom","lineWidth":0},
+{"id":"sh/vu94f29k","kind":"shape","name":"Reflexo diagonal fino","position":{"left":932,"top":316,"width":72,"height":248},"geometry":"custom","lineWidth":0},
+{"id":"sh/wv25o7ap","kind":"shape","name":"Brilho superior esquerdo","position":{"left":302,"top":302,"width":590,"height":180},"geometry":"custom","lineColor":"rgba(255,255,255,0.98)","lineWidth":3.2},
+{"id":"sh/xwbmhcra","kind":"shape","name":"Brilho inferior direito","position":{"left":721,"top":424,"width":577,"height":154},"geometry":"custom","lineColor":"rgba(255,255,255,0.95)","lineWidth":3.2},
+{"id":"sh/m50nixsn","kind":"shape","name":"Refracao inferior","position":{"left":432,"top":575,"width":733,"height":2},"geometry":"custom","lineColor":"rgba(179,188,199,0.4)","lineWidth":0.8},
+{"id":"sh/n694b298","kind":"textbox","name":"Texto editável","position":{"left":460,"top":394,"width":680,"height":92},"text":"Liquid Glass","style":{"fontSize":72,"typeface":"Arial","color":"#333C46","alignment":"center"},"geometry":"rect","lineWidth":0}
+]}
