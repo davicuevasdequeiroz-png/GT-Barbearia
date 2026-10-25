@@ -2309,3 +2309,61 @@ body.booking-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .booking-modal, .booking-modal__box { transition: none; }
 }
+
+/* ===== Phone hero: fit everything in the first visible screen ===== */
+@media (max-width: 600px) {
+  #hero {
+    --nav-pad: 14px;
+    --unit-top: 60px;
+    --brand-top: 88px;
+    --brand-w: 94vw;
+    /* Painted lettering height is 616 / 2172 of its width. */
+    --brand-h: calc(var(--brand-w) * 0.2836);
+    --info-h: 82px;
+    --actions-h: 86px;
+    --team-top: calc(var(--brand-top) + var(--brand-h) + 4px);
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+  }
+  #navbar { padding: var(--nav-pad) 20px; }
+  .hero-unit-desktop { top: var(--unit-top); }
+  .hero-brand { top: var(--brand-top); padding: 0 calc((100vw - var(--brand-w)) / 2); }
+  #barbers-container { top: var(--team-top); }
+  #barbers-container .barber-img-wrap {
+    height: max(150px, min(
+      calc(100svh - var(--team-top) - var(--info-h) - var(--actions-h)),
+      calc((100vw - 96px) * 1.17)
+    ));
+  }
+  #barbers-container .barber-info { min-height: var(--info-h); padding-top: 6px; }
+  #barbers-container .barber-firstname { font-size: 30px; }
+  .hero-location { margin-bottom: 6px; }
+  .booking-link, .hero-story { min-height: 44px; }
+  .booking-link { padding: 10px 8px; }
+  .hero-actions { bottom: max(12px, env(safe-area-inset-bottom)); }
+}
+
+/* Short phones (small screens or tall browser bars): tighten further. */
+@media (max-width: 600px) and (max-height: 700px) {
+  #hero {
+    --nav-pad: 10px;
+    --unit-top: 52px;
+    --brand-top: 76px;
+    --brand-w: 86vw;
+    --info-h: 74px;
+    --actions-h: 80px;
+  }
+  #barbers-container .barber-firstname { font-size: 26px; }
+  #barbers-container .barber-lastname { font-size: 13px; }
+}
+
+@media (max-width: 600px) and (max-height: 600px) {
+  #hero {
+    --unit-top: 48px;
+    --brand-top: 70px;
+    --brand-w: 74vw;
+    --info-h: 66px;
+  }
+  #barbers-container .barber-instagram { display: none; }
+}
