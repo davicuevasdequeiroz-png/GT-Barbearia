@@ -202,9 +202,9 @@
     <div class="hero-actions">
       <div class="hero-booking">
         <p class="hero-location">UBERLÂNDIA <span aria-hidden="true">/</span> MG</p>
-        <a class="booking-link" href="https://instagram.com/gtbarbearia16/" target="_blank" rel="noopener noreferrer">
-          AGENDAR PELO INSTAGRAM <span aria-hidden="true">↗</span>
-        </a>
+        <button type="button" class="booking-link" id="booking-open" aria-haspopup="dialog" aria-controls="booking-modal">
+          AGENDE SEU HORÁRIO <span aria-hidden="true">↗</span>
+        </button>
       </div>
       <a class="hero-story" href="#sobre-nos">CONHEÇA NOSSA HISTÓRIA <span aria-hidden="true">↓</span></a>
     </div>
@@ -417,8 +417,20 @@
     </div>
   </footer>
 
+  <div class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-title" hidden>
+    <div class="booking-modal__box" data-lenis-prevent>
+      <button type="button" class="booking-modal__close" data-booking-close aria-label="Fechar">&times;</button>
+      <h2 id="booking-title" class="booking-modal__title">AGENDE SEU HORÁRIO</h2>
+      <p class="booking-modal__text">Escolha como prefere agendar:</p>
+      <div class="booking-modal__actions">
+        <a class="booking-option booking-option--primary" href="https://cashbarber.com.br/GTBARBEARIA16/inicio" target="_blank" rel="noopener noreferrer">CASHBARBER</a>
+        <a class="booking-option" id="booking-whatsapp" href="https://wa.me/5534997316923?text=Ol%C3%A1%21%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20na%20GT%20Barbearia." target="_blank" rel="noopener noreferrer">WHATSAPP</a>
+      </div>
+    </div>
+  </div>
   <script src="plan-reveal.js"></script>
   <script src="main.js"></script>
+  <script src="booking-modal.js"></script>
 </body>
 
 </html>

@@ -401,6 +401,7 @@ function initLenis() {
       smoothWheel: true,
       syncTouch: false,
     });
+    window.gtLenis = lenis;
     desktopLenis = lenis;
     const tick = time => lenis.raf(time * 1000);
     lenis.on('scroll', ScrollTrigger.update);
