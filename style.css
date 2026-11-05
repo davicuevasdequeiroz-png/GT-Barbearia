@@ -2372,3 +2372,13 @@ body.booking-open { overflow: hidden; }
   }
   #barbers-container .barber-instagram { display: none; }
 }
+
+/* Larger Guilherme portrait (Granada group + phone carousel). */
+#barber-guilherme .barber-img {
+  width: 118%;
+  max-width: none;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  #barber-guilherme .barber-img { width: auto; }
+}
