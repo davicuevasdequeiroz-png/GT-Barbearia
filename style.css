@@ -1980,7 +1980,9 @@ a:focus-visible {
 
 /* Phone hero: location masthead, full-size portrait and two clear actions. */
 @media (max-width: 600px) {
-  #hero-canvas { display: block; opacity: 0.72; pointer-events: none; }
+  #hero { background: #000; }
+  #hero-canvas { display: block; opacity: 1; pointer-events: none; }
+  #hero-bottom-gradient { height: 115px; background: linear-gradient(to top, rgba(5, 2, 0, 0.82) 0%, rgba(5, 2, 0, 0.35) 55%, transparent 100%); }
   #barbers-container { padding-inline: 28px; bottom: 86px; }
   .barber-group { padding-bottom: 0; }
   .barber-group-unit { display: none; }
