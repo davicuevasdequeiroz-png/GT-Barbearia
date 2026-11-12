@@ -2381,4 +2381,31 @@ body.booking-open { overflow: hidden; }
 }
 @media (max-width: 600px) {
   #barber-guilherme .barber-img { width: auto; }
+
+  /* Grounding shadow vignette between the barber's waist and name */
+  #barbers-container .barber-img-wrap::after {
+    content: '';
+    position: absolute;
+    left: -12%;
+    right: -12%;
+    bottom: -2px;
+    height: 76px;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 64% 100% at 50% 100%, rgba(10, 7, 5, 0.98) 0%, rgba(10, 7, 5, 0.82) 45%, rgba(10, 7, 5, 0) 100%),
+      linear-gradient(to top, rgba(10, 7, 5, 0.95) 0%, rgba(10, 7, 5, 0.45) 48%, transparent 100%);
+  }
+
+  #barbers-container .barber-info::before {
+    content: '';
+    position: absolute;
+    top: -24px;
+    bottom: -14px;
+    left: -16%;
+    right: -16%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 66% 78% at 50% 28%, rgba(10, 7, 5, 0.94) 0%, rgba(10, 7, 5, 0.72) 48%, rgba(10, 7, 5, 0) 100%);
+  }
 }
