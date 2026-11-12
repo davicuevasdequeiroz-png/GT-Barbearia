@@ -282,63 +282,10 @@ function initHeroShader() {
   const background = noiseSource + `
     void main(){
       vec2 uv=gl_FragCoord.xy/u_resolution;
-      if(u_mobile>0.5){
-        float dx=abs(uv.x-0.5)*2.0;
-        float side=step(0.5,uv.x);
-        float numHalfBars=4.0;
-        float barCoord=dx*numHalfBars;
-        float barIdx=floor(min(barCoord,numHalfBars-0.001));
-        float localX=fract(barCoord);
-
-        // Stepper V/U profile from center (0) to outer edges (3)
-        float normIdx=barIdx/(numHalfBars-1.0);
-        float baseH=mix(0.38,0.88,pow(normIdx,1.15));
-
-        // Smooth up-and-down bar movement like the reference video
-        float phase=barIdx*1.35+side*0.85;
-        float wave=sin(u_time*1.85+phase)*0.085+cos(u_time*1.15-phase*0.7)*0.045;
-        float h=clamp(baseH+wave,0.22,0.95);
-
-        // Soft vertical fade at the top of each bar (like reference image 3)
-        float topFade=smoothstep(h,h-0.22,uv.y);
-
-        // Hotter lower core glow rising from the base of each bar
-        float coreH=h*0.48+sin(u_time*2.1+phase+0.6)*0.04;
-        float coreFade=smoothstep(coreH,0.0,uv.y);
-
-        // Horizontal 3D fluted shading across each bar (darker inner -> bright outer edge)
-        float horizGrad= mix(0.22,1.0,pow(localX,0.85));
-        float rimHighlight=smoothstep(0.82,0.95,localX)*smoothstep(0.995,0.95,localX);
-
-        // Crisp dark vertical seam between adjacent bars
-        float seam=smoothstep(0.0,0.035,localX)*smoothstep(1.0,0.965,localX);
-        // Subtle center seam at dx = 0
-        float centerSeam=smoothstep(0.0,0.012,dx);
-        seam*=centerSeam;
-
-        // Color palette matching the 3rd reference image
-        vec3 deepOrange=vec3(0.42,0.10,0.005);
-        vec3 midOrange=vec3(0.96,0.36,0.01);
-        vec3 brightAmber=vec3(1.0,0.58,0.12);
-        vec3 hotGold=vec3(1.0,0.78,0.32);
-
-        vec3 barCol=mix(deepOrange,midOrange,horizGrad);
-        barCol=mix(barCol,brightAmber,pow(localX,2.2)*0.75+rimHighlight*0.55);
-        barCol*=topFade;
-
-        // Add intense bottom glow inside each bar
-        barCol+=mix(midOrange,hotGold,horizGrad*0.7+0.3)*coreFade*topFade*0.85;
-        // Subtle rim line glow along the outer edge of the bar
-        barCol+=brightAmber*rimHighlight*smoothstep(h+0.02,h*0.15,uv.y)*0.35;
-
-        // Apply crisp vertical bar separators
-        barCol*=mix(0.08,1.0,seam);
-
-        gl_FragColor=vec4(barCol,1.0);
-        return;
-      }
-      float t=u_time*0.028;
-      vec2 p=uv*vec2(3.2,2.2)+(u_mouse-0.5)*0.08;
+      float t=u_time*mix(0.028,0.075,u_mobile);
+      vec2 desktopUV=uv*vec2(3.2,2.2);
+      vec2 mobileUV=(uv-0.5)*vec2(u_resolution.x/u_resolution.y,1.0)*3.8;
+      vec2 p=mix(desktopUV,mobileUV,u_mobile)+(u_mouse-0.5)*0.08;
       vec2 warp=vec2(fbm(p+vec2(t,-t)),fbm(p+vec2(7.3,-t*0.7)));
       float cloud=fbm(p+warp*1.4+vec2(-t,t*0.4));
       float texture=smoothstep(0.35,0.75,cloud);
@@ -349,8 +296,62 @@ function initHeroShader() {
       vec3 col=vec3(0.024,0.012,0.008);
       col+=vec3(0.30,0.095,0.014)*smoothstep(0.20,0.75,cloud)*edge;
       col+=vec3(0.12,0.034,0.005)*texture*sides*edge;
-      col+=vec3(0.38,0.14,0.022)*halo;
+      col+=vec3(0.38,0.14,0.022)*halo*mix(1.0,0.8,u_mobile);
       col*=0.65+0.35*smoothstep(0.0,0.2,uv.y);
+
+      if(u_mobile>0.5){
+        float dx=abs(uv.x-0.5)*2.0;
+        float side=step(0.5,uv.x);
+        float numHalfBars=4.0;
+        float barCoord=dx*numHalfBars;
+        float barIdx=floor(min(barCoord,numHalfBars-0.001));
+        float localX=fract(barCoord);
+
+        // Bars start above the bottom booking buttons (~0.14) and stay below "GT BARBEARIA" (~0.66)
+        float barBottom=0.14;
+        float normIdx=barIdx/(numHalfBars-1.0);
+        float baseH=mix(0.37,0.61,pow(normIdx,1.15));
+
+        // Slow, calm up-and-down movement
+        float phase=barIdx*1.35+side*0.85;
+        float wave=sin(u_time*0.42+phase)*0.038+cos(u_time*0.27-phase*0.7)*0.022;
+        float h=clamp(baseH+wave,0.30,0.65);
+
+        // Smooth fade-in above the booking buttons and soft fade-out at each bar's top
+        float bottomMask=smoothstep(barBottom,barBottom+0.08,uv.y);
+        float topFade=smoothstep(h,h-0.15,uv.y);
+        // Never allow bars to reach the "GT BARBEARIA" lettering
+        float ceilingMask=smoothstep(0.68,0.60,uv.y);
+        float barVertMask=bottomMask*topFade*ceilingMask;
+
+        // Soft warm glow near the base of the bars (above the buttons)
+        float coreH=mix(barBottom,h,0.48)+sin(u_time*0.48+phase)*0.018;
+        float coreFade=smoothstep(coreH,barBottom,uv.y);
+
+        // Horizontal 3D fluted shading inside each bar without blowing out colors
+        float horizGrad=mix(0.15,0.88,pow(localX,0.95));
+        float rimHighlight=smoothstep(0.84,0.95,localX)*smoothstep(0.995,0.95,localX);
+
+        // Crisp dark vertical separator seams between bars
+        float seam=smoothstep(0.0,0.035,localX)*smoothstep(1.0,0.965,localX);
+        seam*=smoothstep(0.0,0.014,dx);
+
+        // Controlled brand orange palette (no yellow/white blowout)
+        vec3 darkOrange=vec3(0.18,0.045,0.004);
+        vec3 midOrange=vec3(0.62,0.20,0.012);
+        vec3 rimOrange=vec3(0.82,0.30,0.025);
+
+        vec3 barCol=mix(darkOrange,midOrange,horizGrad);
+        barCol=mix(barCol,rimOrange,pow(localX,2.4)*0.55+rimHighlight*0.45);
+        barCol+=midOrange*coreFade*0.28;
+        barCol*=barVertMask;
+
+        // Blend bars with the original background shader while preserving dark seams
+        float barAlpha=barVertMask*mix(0.35,0.78,horizGrad);
+        col=mix(col,col*0.35+barCol,barAlpha);
+        col*=mix(1.0,mix(0.28,1.0,seam),barVertMask);
+      }
+
       gl_FragColor=vec4(col,1.0);
     }
   `;
